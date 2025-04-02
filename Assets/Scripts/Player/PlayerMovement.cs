@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 10.0f;
 
     private Rigidbody2D rb;
+    private float moveInput;
 
     [Header("GroundCheck")]
     public bool isGrounded;
@@ -42,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleMovement()
     {
-        float moveInput = Input.GetAxisRaw("Horizontal");
+        moveInput = Input.GetAxisRaw("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
         if (playerAttack.isAttack)
@@ -87,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Dash()
     {
-        if (!isGrounded || isDash || isSlide)
+        if (!isGrounded || isDash || isSlide || (moveInput == 0))
         {
             return;
         }
@@ -101,12 +102,6 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(DashCooldownByAnimation());
         }
     }
-
-    //public void EndDash()
-    //{
-    //    moveSpeed = walkSpeed;
-    //    isDash = false;
-    //}
 
     private IEnumerator DashCooldownByAnimation()
     {
@@ -126,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Slide()
     {
-        if (!isGrounded || isDash || isSlide)
+        if (!isGrounded || isDash || isSlide || (moveInput == 0))
         {
             return;
         }
@@ -155,11 +150,4 @@ public class PlayerMovement : MonoBehaviour
         moveSpeed = walkSpeed;
         isSlide = false;
     }
-
-    //public void EndSlide()
-    //{
-    //    moveSpeed = walkSpeed;
-    //    isSlide = false;
-    //}
-
 }
