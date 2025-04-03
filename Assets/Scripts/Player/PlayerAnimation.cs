@@ -14,6 +14,10 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetTrigger("Attack");
     }
 
+    public void TriggerParring()
+    {
+        animator.SetTrigger("Parring");
+    }
     public void TriggerJump()
     {
         animator.SetTrigger("Jump");

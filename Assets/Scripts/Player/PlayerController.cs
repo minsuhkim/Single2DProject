@@ -6,19 +6,49 @@ public class PlayerController : MonoBehaviour
     private PlayerAttack attack;
     private PlayerHP hp;
 
+    private Vector3 startPos;
+
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
         attack = GetComponent<PlayerAttack>();
         hp = GetComponent<PlayerHP>();
     }
+    private void Start()
+    {
+        startPos = transform.position;
+    }
 
     private void Update()
     {
         movement.HandleMovement();
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isDash)
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isDash && !movement.isSlide && !attack.isParrying)
         {
             attack.PerformAttack();
+        }
+
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isDash && !movement.isSlide && !attack.isAttack)
+        {
+            attack.PerformParrying();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Coin")
+        {
+            GameManager.Instance.AddCoin(10);
+            Destroy(collision.gameObject);
+        }
+        else if(collision.tag == "DeathZone")
+        {
+            // death
+            transform.position = startPos;
+            SoundManager.Instance.PlaySFX(SFXType.Hit);
+        }
+        else if(collision.tag == "BossZone")
+        {
+            SoundManager.Instance.PlayBGM(BGMType.BossBGM, 1);
         }
     }
 }

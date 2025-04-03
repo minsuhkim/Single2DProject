@@ -43,10 +43,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleMovement()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
+        if(!isDash && !isSlide)
+        {
+            moveInput = Input.GetAxisRaw("Horizontal");
+        }
+
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        if (playerAttack.isAttack)
+        if (playerAttack.isAttack || playerAttack.isParrying)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocityY);
         }
@@ -72,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimation.SetFall(rb.linearVelocityY);
 
         Jump();
-        Dash();
+        //Dash();
         Slide();
     }
 
@@ -81,43 +85,47 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X) && isGrounded)
         {
+            SoundManager.Instance.PlaySFX(SFXType.Jump);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             playerAnimation.TriggerJump();
             playerAttack.isAttack = false;
+            playerAttack.isParrying = false;
         }
     }
-    private void Dash()
-    {
-        if (!isGrounded || isDash || isSlide || (moveInput == 0))
-        {
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            isDash = true;
-            playerAttack.isAttack = false;
-            moveSpeed = dashSpeed;
-            playerAnimation.TriggerDash();
+    //private void Dash()
+    //{
+    //    if (!isGrounded || isDash || isSlide || (moveInput == 0))
+    //    {
+    //        return;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.C))
+    //    {
+    //        SoundManager.Instance.PlaySFX(SFXType.Dash);
+    //        isDash = true;
+    //        playerAttack.isAttack = false;
+    //        playerAttack.isParrying = false;
+    //        moveSpeed = dashSpeed;
+    //        playerAnimation.TriggerDash();
 
-            StartCoroutine(DashCooldownByAnimation());
-        }
-    }
+    //        StartCoroutine(DashCooldownByAnimation());
+    //    }
+    //}
 
-    private IEnumerator DashCooldownByAnimation()
-    {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName(dashStateName))
-        {
-            float animationLength = stateInfo.length;
-            yield return new WaitForSeconds(animationLength);
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
-        moveSpeed = walkSpeed;
-        isDash = false;
-    }
+    //private IEnumerator DashCooldownByAnimation()
+    //{
+    //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    //    if (stateInfo.IsName(dashStateName))
+    //    {
+    //        float animationLength = stateInfo.length;
+    //        yield return new WaitForSeconds(animationLength);
+    //    }
+    //    else
+    //    {
+    //        yield return new WaitForSeconds(0.5f);
+    //    }
+    //    moveSpeed = walkSpeed;
+    //    isDash = false;
+    //}
 
     private void Slide()
     {
@@ -127,8 +135,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
+            SoundManager.Instance.PlaySFX(SFXType.Slide);
             isSlide = true;
             playerAttack.isAttack = false;
+            playerAttack.isParrying = false;
             moveSpeed = slideSpeed;
             playerAnimation.TriggerSlide();
             StartCoroutine(SlideCooldownByAnimation());
@@ -149,5 +159,10 @@ public class PlayerMovement : MonoBehaviour
         }
         moveSpeed = walkSpeed;
         isSlide = false;
+    }
+
+    public void PlayRunSFX()
+    {
+        SoundManager.Instance.PlaySFX(SFXType.Walk);
     }
 }
