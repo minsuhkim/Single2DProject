@@ -222,5 +222,6 @@ public enum SFXType
     Jump,
     Slide,
     Walk,
-    Hit
+    Hit,
+    Parrying
 }

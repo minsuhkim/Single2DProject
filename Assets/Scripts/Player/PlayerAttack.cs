@@ -5,7 +5,7 @@ public class PlayerAttack : MonoBehaviour
 {
     private PlayerAnimation playerAnimation;
     private Animator animator;
-
+    private SpriteRenderer spriteRenderer;
     public bool isAttack = false;
     public bool isParrying = false;
 
@@ -14,8 +14,12 @@ public class PlayerAttack : MonoBehaviour
 
     public string parringStateName = "Parring";
 
+    public GameObject attackRangeLeft;
+    public GameObject attackRangeRight;
+
     private void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         playerAnimation = GetComponent<PlayerAnimation>();
         animator = GetComponent<Animator>();
     }
@@ -34,6 +38,24 @@ public class PlayerAttack : MonoBehaviour
         }
 
         StartCoroutine(AttackCooldownByAnimation());
+    }
+
+    public void OnAttackCollider()
+    {
+        if (spriteRenderer.flipX)
+        {
+            attackRangeLeft.SetActive(true);
+        }
+        else
+        {
+            attackRangeRight.SetActive(true);
+        }
+    }
+
+    public void OffAttackCollider()
+    {
+        attackRangeLeft.SetActive(false);
+        attackRangeRight.SetActive(false);
     }
 
     private IEnumerator AttackCooldownByAnimation()

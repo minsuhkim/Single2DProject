@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 startPos;
 
+
+    private bool isPaused = false;
+    public GameObject pausePanel;
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
@@ -31,6 +34,32 @@ public class PlayerController : MonoBehaviour
         {
             attack.PerformParrying();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+    }
+
+    public void Pause()
+    {
+        pausePanel.SetActive(true);
+        isPaused = true;
+        Time.timeScale = 0;
+    }
+
+    public void Resume()
+    {
+        pausePanel.SetActive(false);
+        isPaused = false;
+        Time.timeScale = 1;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
