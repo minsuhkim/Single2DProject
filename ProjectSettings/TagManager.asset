@@ -9,6 +9,7 @@ TagManager:
   - BossZone
   - Enemy
   - PlayerAttack
+  - EnemyAttack
   layers:
   - Default
   - TransparentFX

@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleMovement()
     {
-        if(!isDash && !isSlide)
+        if(!isDash && !isSlide && !PlayerController.Instance.isKnockback)
         {
             moveInput = Input.GetAxisRaw("Horizontal");
         }
@@ -147,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SlideCooldownByAnimation()
     {
+        PlayerController.Instance.isInvincible = true;
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName(slideStateName))
         {
@@ -158,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
         moveSpeed = walkSpeed;
+        PlayerController.Instance.isInvincible = false;
         isSlide = false;
     }
 

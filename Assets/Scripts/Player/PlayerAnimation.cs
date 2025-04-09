@@ -33,6 +33,11 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetTrigger("Slide");
     }
 
+    public void TriggerHurt()
+    {
+        animator.SetTrigger("Hurt");
+    }
+
     public void SetIsGrounded(bool isGrounded)
     {
         animator.SetBool("isGround", isGrounded);
