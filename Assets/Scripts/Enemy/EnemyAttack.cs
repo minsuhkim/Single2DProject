@@ -14,7 +14,6 @@ public class EnemyAttack : MonoBehaviour
         {
             enemy.ChangeState(EnemyState.Attack);
         }
-
     }
 
     private void OnTriggerExit2D(Collider2D collision)

@@ -4,7 +4,7 @@ using UnityEngine;
 
  public enum EnemyType
 {
-    None, Bringer
+    None, Bringer, ArchDemon, Elf, Druid, DemonKin,
 }
 
 public enum EnemyState
@@ -13,11 +13,12 @@ public enum EnemyState
     Chase,
     Attack,
     Idle,
+    Stun
 }
 
 public class Enemy : MonoBehaviour
 {
-    public EnemyState state = EnemyState.Patrol;
+    public EnemyState currentState = EnemyState.Patrol;
     [Header("Type")]
     public EnemyType type;
 
@@ -30,7 +31,7 @@ public class Enemy : MonoBehaviour
     private float enemyHP = 100;
 
     private Color originColor;
-    private Renderer objecteRenderer;
+    private Renderer objectRenderer;
     public float colorChangeDuration = .05f;
 
     [Header("attack effect transform")]
@@ -44,6 +45,12 @@ public class Enemy : MonoBehaviour
 
     [Header("Attack")]
     public bool isAttack = false;
+    public GameObject attackRangeLeft;
+    public GameObject attackRangeRight;
+
+    [Header("Parrying")]
+    public GameObject parryingRangeLeft;
+    public GameObject parryingRangeRight;
 
     [Header("Wait")]
     public bool isWait = false;
@@ -53,11 +60,14 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
-        objecteRenderer = GetComponent<Renderer>();
+        if (!(type == EnemyType.None))
+        {
+            animator = GetComponent<Animator>();
+        }
+        objectRenderer = GetComponent<Renderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        originColor = objecteRenderer.material.color;
+        originColor = objectRenderer.material.color;
 
         startPos = transform.position;
 
@@ -66,7 +76,11 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        switch (state)
+        if(type == EnemyType.None)
+        {
+            return;
+        }
+        switch (currentState)
         {
             case EnemyState.Patrol:
                 Patrol();
@@ -80,16 +94,30 @@ public class Enemy : MonoBehaviour
             case EnemyState.Idle:
                 Idle();
                 break;
+            case EnemyState.Stun:
+                Stun();
+                break;
         }
     }
 
+
     public void ChangeState(EnemyState state)
     {
-        if (isWait)
+        if (type == EnemyType.None || isWait)
         {
             return;
         }
-        this.state = state;
+        this.currentState = state;
+        Debug.Log(currentState);
+    }
+
+    private void Stun()
+    {
+        //StopAllCoroutines();
+        OffAttackRange();
+        animator.SetBool("isWalk", false);
+        animator.SetTrigger("Stun");
+        StartCoroutine(StunCoroutine());
     }
 
     private void Idle()
@@ -105,6 +133,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        animator.SetBool("isWalk", true);
         direction = (target.position.x - transform.position.x) > 0 ? 1 : -1;
         spriteRenderer.flipX = direction == 1 ? true : false;
         transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
@@ -154,6 +183,42 @@ public class Enemy : MonoBehaviour
         StartCoroutine(AttackCoroutine());
     }
 
+    public void OnAttackRange()
+    {
+        if (spriteRenderer.flipX)
+        {
+            attackRangeRight.SetActive(true);
+        }
+        else
+        {
+            attackRangeLeft.SetActive(true);
+        }
+    }
+
+    public void OffAttackRange()
+    {
+        attackRangeLeft.SetActive(false);
+        attackRangeRight.SetActive(false);
+    }
+
+    public void OnParryingRange()
+    {
+        if (spriteRenderer.flipX)
+        {
+            parryingRangeRight.SetActive(true);
+        }
+        else
+        {
+            parryingRangeLeft.SetActive(true);
+        }
+    }
+
+    public void OffParryingRange()
+    {
+        parryingRangeRight.SetActive(false);
+        parryingRangeLeft.SetActive(false);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "PlayerAttack")
@@ -169,14 +234,12 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator HitCoroutine()
     {
-        // 소리를 아직 못구함 > 임시로 패링 소리 삽입
-        SoundManager.Instance.PlaySFX(SFXType.Parrying);
-        //StartCoroutine(CameraShake(duration, magnitude));
+        Debug.Log("공격 성공");
+        SoundManager.Instance.PlaySFX(SFXType.Hit);
         CameraManager.Instance.StartCameraShake(duration, magnitude);
-        //GenerateCameraImpulse();
-        objecteRenderer.material.color = Color.red;
+        objectRenderer.material.color = Color.red;
         yield return new WaitForSeconds(colorChangeDuration);
-        objecteRenderer.material.color = originColor;
+        objectRenderer.material.color = originColor;
     }
 
     private IEnumerator AttackCoroutine()
@@ -204,5 +267,40 @@ public class Enemy : MonoBehaviour
         isWait = true;
         yield return new WaitForSeconds(1f);
         isWait = false;
+
+        float distance = Mathf.Abs(target.position.x - transform.position.x);
+        if(distance < 2)
+        {
+            ChangeState(EnemyState.Attack);
+        }
+        else if(distance < 5)
+        {
+            ChangeState(EnemyState.Chase);
+        }
+        else
+        {
+            ChangeState(EnemyState.Patrol);
+        }
+    }
+
+    private IEnumerator StunCoroutine()
+    {
+        isWait = true;
+        yield return new WaitForSeconds(1.5f);
+        isWait = false;
+
+        float distance = Mathf.Abs(target.position.x - transform.position.x);
+        if (distance < 2)
+        {
+            ChangeState(EnemyState.Attack);
+        }
+        else if (distance < 5)
+        {
+            ChangeState(EnemyState.Chase);
+        }
+        else
+        {
+            ChangeState(EnemyState.Patrol);
+        }
     }
 }

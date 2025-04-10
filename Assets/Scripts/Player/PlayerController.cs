@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 startPos;
 
-
     private bool isPaused = false;
     public GameObject pausePanel;
 
@@ -116,24 +115,29 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.tag == "EnemyAttack")
         {
-            if (!isInvincible)
-            {
-                anim.TriggerHurt();
-                ParticleManager.Instance.ParticlePlay(ParticleType.PlayerDamage, transform.position, Vector3.one * 2);
-                SoundManager.Instance.PlaySFX(SFXType.Hit);
-                CameraManager.Instance.StartCameraShake(shakeDuration, shakeMagnitude);
-                StartCoroutine(KnockbackCoroutine());
-                rb.linearVelocity = Vector2.zero;
-                rb.AddForce((transform.position - collision.transform.position) * knockbackForce, ForceMode2D.Impulse);
-                StartCoroutine(Invincibility());
-            }
+            Hurt(collision.transform);
+        }
+    }
+
+    private void Hurt(Transform enemyTransform)
+    {
+        if (!isInvincible)
+        {
+            anim.TriggerHurt();
+            ParticleManager.Instance.ParticlePlay(ParticleType.PlayerDamage, transform.position, Vector3.one * 2);
+            SoundManager.Instance.PlaySFX(SFXType.Hit);
+            CameraManager.Instance.StartCameraShake(shakeDuration, shakeMagnitude);
+            StartCoroutine(KnockbackCoroutine());
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce((transform.position - enemyTransform.position) * knockbackForce, ForceMode2D.Impulse);
+            StartCoroutine(Invincibility());
         }
     }
 
     IEnumerator Invincibility()
     {
         isInvincible = true;
-        Time.timeScale = 0.8f;
+        //Time.timeScale = 0.5f;
         //float elapsedTime = 0f;
         //float blinkInterval = 0.2f;
 

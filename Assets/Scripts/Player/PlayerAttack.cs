@@ -9,13 +9,16 @@ public class PlayerAttack : MonoBehaviour
     public bool isAttack = false;
     public bool isParrying = false;
 
-    [Header("공격 애니메이션 상태 이름")]
+    [Header("Attack")]
     public string attackStateName = "Attack";
-
-    public string parringStateName = "Parring";
-
     public GameObject attackRangeLeft;
     public GameObject attackRangeRight;
+
+    [Header("Parrying")]
+    public string parringStateName = "Parring";
+    public GameObject parryingRangeLeft;
+    public GameObject parryingRangeRight;
+
 
     private void Start()
     {
@@ -77,6 +80,24 @@ public class PlayerAttack : MonoBehaviour
         isAttack = false;
     }
 
+    public void OnParryingCollider()
+    {
+        if (spriteRenderer.flipX)
+        {
+            parryingRangeLeft.SetActive(true);
+        }
+        else
+        {
+            parryingRangeRight.SetActive(true);
+        }
+    }
+
+    public void OffParryingCollider()
+    {
+        parryingRangeLeft.SetActive(false);
+        parryingRangeRight.SetActive(false);
+    }
+
     public void PerformParrying()
     {
         if (isParrying)
@@ -96,9 +117,6 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator ParryingCooldownByAnimation()
     {
         isParrying = true;
-
-        //안정성을 위함(다음 프레임까지 대기)
-        yield return null;
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName(parringStateName))
         {

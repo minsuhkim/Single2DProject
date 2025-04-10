@@ -85,11 +85,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X) && isGrounded)
         {
+
             SoundManager.Instance.PlaySFX(SFXType.Jump);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             playerAnimation.TriggerJump();
             playerAttack.isAttack = false;
             playerAttack.isParrying = false;
+            playerAttack.OffAttackCollider();
+            playerAttack.OffParryingCollider();
         }
     }
     //private void Dash()
@@ -141,6 +144,8 @@ public class PlayerMovement : MonoBehaviour
             playerAttack.isParrying = false;
             moveSpeed = slideSpeed;
             playerAnimation.TriggerSlide();
+            playerAttack.OffAttackCollider();
+            playerAttack.OffParryingCollider();
             StartCoroutine(SlideCooldownByAnimation());
         }
     }
