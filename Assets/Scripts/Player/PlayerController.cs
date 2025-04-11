@@ -59,15 +59,15 @@ public class PlayerController : MonoBehaviour
             movement.HandleMovement();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isDash && !movement.isSlide && !attack.isParrying)
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isDash && !movement.isSlide)
         {
             attack.PerformAttack();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isDash && !movement.isSlide && !attack.isAttack)
-        {
-            attack.PerformParrying();
-        }
+        //if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isDash && !movement.isSlide && !attack.isAttack)
+        //{
+        //    attack.PerformParrying();
+        //}
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

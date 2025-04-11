@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
             playerAttack.isAttack = false;
             playerAttack.isParrying = false;
             playerAttack.OffAttackCollider();
-            playerAttack.OffParryingCollider();
+            //playerAttack.OffParryingCollider();
         }
     }
     //private void Dash()
@@ -145,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = slideSpeed;
             playerAnimation.TriggerSlide();
             playerAttack.OffAttackCollider();
-            playerAttack.OffParryingCollider();
+            //playerAttack.OffParryingCollider();
             StartCoroutine(SlideCooldownByAnimation());
         }
     }
