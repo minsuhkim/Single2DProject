@@ -1,6 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
+public enum PlayerState
+{
+    Warrior,
+    Bringer
+}
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance { get; private set; }
@@ -8,7 +13,9 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement movement;
     private PlayerAttack attack;
     private PlayerHP hp;
-    private PlayerAnimation anim;
+    private PlayerExchangeForm changeForm;
+    public PlayerAnimation anim;
+
 
     private Rigidbody2D rb;
 
@@ -30,6 +37,12 @@ public class PlayerController : MonoBehaviour
     public float knockbackForce = 0.5f;
     public bool isKnockback = false;
 
+    [Header("Form")]
+    public PlayerState state = PlayerState.Warrior;
+
+    [Header("Stat")]
+    private PlayerStats stats;
+
     private void Awake()
     {
         if (Instance == null)
@@ -46,6 +59,8 @@ public class PlayerController : MonoBehaviour
         hp = GetComponent<PlayerHP>();
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
+        changeForm = GetComponent<PlayerExchangeForm>();
+        stats = GetComponent<PlayerStats>();
     }
     private void Start()
     {
@@ -59,9 +74,30 @@ public class PlayerController : MonoBehaviour
             movement.HandleMovement();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isDash && !movement.isSlide)
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isSlide)
         {
             attack.PerformAttack();
+        }
+
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isSlide)
+        {
+            attack.PerformAttack2();
+        }
+
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide)
+        {
+            if(state == PlayerState.Warrior)
+            {
+                changeForm.ExchangeFormBringer();
+                state = PlayerState.Bringer;
+            }
+            else
+            {
+                changeForm.ExchangeFormWarrior();
+                state = PlayerState.Warrior;
+            }
+
+                stats.SetStats(state);
         }
 
         //if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isDash && !movement.isSlide && !attack.isAttack)

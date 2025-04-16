@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    private Animator animator;
+    public Animator animator;
 
     private void Awake()
     {
@@ -13,6 +13,12 @@ public class PlayerAnimation : MonoBehaviour
     {
         animator.SetTrigger("Attack");
     }
+
+    public void TriggerAttack2()
+    {
+        animator.SetTrigger("Attack2");
+    }
+
 
     public void TriggerParring()
     {
@@ -36,6 +42,11 @@ public class PlayerAnimation : MonoBehaviour
     public void TriggerHurt()
     {
         animator.SetTrigger("Hurt");
+    }
+
+    public void TriggerTeleport()
+    {
+        animator.SetTrigger("Teleport");
     }
 
     public void SetIsGrounded(bool isGrounded)

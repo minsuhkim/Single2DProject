@@ -223,6 +223,7 @@ public class Enemy : MonoBehaviour
     {
         if(collision.tag == "PlayerAttack")
         {
+            Debug.Log("플레이어한테 공격 당함");
             StartCoroutine(HitCoroutine());
             if(particleTransform.Length > 0)
             {

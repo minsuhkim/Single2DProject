@@ -10,14 +10,15 @@ public class PlayerAttack : MonoBehaviour
     public bool isParrying = false;
 
     [Header("Attack")]
-    public string attackStateName = "Attack";
-    public GameObject attackRangeLeft;
-    public GameObject attackRangeRight;
+    //public string attackStateName = "Attack";
+    public GameObject warriorAttackRangeLeft;
+    public GameObject warriorAttackRangeRight;
+    public GameObject bringerAttackRangeLeft;
+    public GameObject bringerAttackRangeRight;
 
-    [Header("Parrying")]
-    public string parringStateName = "Parring";
-    public GameObject parryingRangeLeft;
-    public GameObject parryingRangeRight;
+    [Header("Attack2")]
+    public GameObject warriorAttack2RangeLeft;
+    public GameObject warriorAttack2RangeRight;
 
 
     private void Start()
@@ -29,26 +30,32 @@ public class PlayerAttack : MonoBehaviour
 
     public void PerformAttack()
     {
-        //if (isAttack)
-        //{
-        //    return;
-        //}
+        if (isAttack)
+        {
+            return;
+        }
 
         if (playerAnimation != null)
         {
-            if (isAttack)
-            {
-                animator.SetInteger("AttackCount", 1);
-            }
-            else
-            {
-                animator.SetInteger("AttackCount", 0);
-            }
             playerAnimation.TriggerAttack();
-            //SoundManager.Instance.PlaySFX(SFXType.Attack);
+            SoundManager.Instance.PlaySFX(SFXType.Attack);
         }
-        //StopAllCoroutines();
-        StartCoroutine(AttackCooldownByAnimation());
+        StartCoroutine(AttackCooldown());
+    }
+
+    public void PerformAttack2()
+    {
+        if (isAttack)
+        {
+            return;
+        }
+
+        if (playerAnimation != null)
+        {
+            playerAnimation.TriggerAttack2();
+            SoundManager.Instance.PlaySFX(SFXType.Attack);
+        }
+        StartCoroutine(Attack2Cooldown());
     }
 
     public void PlayAttackSFX()
@@ -58,92 +65,92 @@ public class PlayerAttack : MonoBehaviour
 
     public void OnAttackCollider()
     {
-        if (spriteRenderer.flipX)
+        if (PlayerController.Instance.state == PlayerState.Warrior)
         {
-            attackRangeLeft.SetActive(true);
+            if (spriteRenderer.flipX)
+            {
+                warriorAttackRangeLeft.SetActive(true);
+            }
+            else
+            {
+                warriorAttackRangeRight.SetActive(true);
+            }
         }
         else
         {
-            attackRangeRight.SetActive(true);
+            if (spriteRenderer.flipX)
+            {
+                bringerAttackRangeRight.SetActive(true);
+            }
+            else
+            {
+                bringerAttackRangeLeft.SetActive(true);
+            }
+        }
+    }
+
+    public void OnAttack2Collider()
+    {
+        if (spriteRenderer.flipX)
+        {
+            warriorAttack2RangeLeft.SetActive(true);
+        }
+        else
+        {
+            warriorAttack2RangeRight.SetActive(true);
         }
     }
 
     public void OffAttackCollider()
     {
-        attackRangeLeft.SetActive(false);
-        attackRangeRight.SetActive(false);
+        warriorAttackRangeLeft.SetActive(false);
+        warriorAttackRangeRight.SetActive(false);
+        warriorAttack2RangeLeft.SetActive(false);
+        warriorAttack2RangeRight.SetActive(false);
+        bringerAttackRangeLeft.SetActive(false);
+        bringerAttackRangeRight.SetActive(false);
     }
 
-    private IEnumerator AttackCooldownByAnimation()
+    private IEnumerator AttackCooldown()
     {
         isAttack = true;
-
         //안정성을 위함(다음 프레임까지 대기)
-        //yield return null;
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName(attackStateName))
-        {
-            Debug.Log(attackStateName);
-            float animationLength = stateInfo.length;
-            yield return new WaitForSeconds(animationLength);
-        }
-        else if (stateInfo.IsName("Attack2"))
-        {
-            Debug.Log("Attack2");
-            float animationLength = stateInfo.length;
-            yield return new WaitForSeconds(animationLength);
-        }
+        yield return null;
+        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //if (stateInfo.IsName(attackStateName))
+        //{
+        //    float animationLength = stateInfo.length;
+        //    yield return new WaitForSeconds(PlayerStats.Instance.warriorAttackSpeed);
+        //}
+        //else
+        //{
+        //    yield return new WaitForSeconds(0.5f);
+        //}
+        yield return new WaitForSeconds(PlayerStats.Instance.attackSpeed);
+        OffAttackCollider();
         isAttack = false;
     }
 
-    //public void OnParryingCollider()
-    //{
-    //    if (spriteRenderer.flipX)
-    //    {
-    //        parryingRangeLeft.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        parryingRangeRight.SetActive(true);
-    //    }
-    //}
-
-    //public void OffParryingCollider()
-    //{
-    //    parryingRangeLeft.SetActive(false);
-    //    parryingRangeRight.SetActive(false);
-    //}
-
-    //public void PerformParrying()
-    //{
-    //    if (isParrying)
-    //    {
-    //        return;
-    //    }
-
-    //    if (playerAnimation != null)
-    //    {
-    //        playerAnimation.TriggerParring();
-    //        SoundManager.Instance.PlaySFX(SFXType.Attack);
-    //    }
-
-    //    StartCoroutine(ParryingCooldownByAnimation());
-    //}
-
-    //private IEnumerator ParryingCooldownByAnimation()
-    //{
-    //    isParrying = true;
-    //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-    //    if (stateInfo.IsName(parringStateName))
-    //    {
-    //        float animationLength = stateInfo.length;
-    //        yield return new WaitForSeconds(animationLength);
-    //    }
-    //    else
-    //    {
-    //        yield return new WaitForSeconds(0.5f);
-    //    }
-    //    isParrying = false;
-    //}
-
+    private IEnumerator Attack2Cooldown()
+    {
+        isAttack = true;
+        //안정성을 위함(다음 프레임까지 대기)
+        yield return null;
+        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //if (stateInfo.IsName(attackStateName))
+        //{
+        //    float animationLength = stateInfo.length;
+        //    yield return new WaitForSeconds(PlayerStats.Instance.warriorAttackSpeed);
+        //}
+        //else
+        //{
+        //    yield return new WaitForSeconds(0.5f);
+        //}
+        yield return new WaitForSeconds(PlayerStats.Instance.attack2Speed);
+        if (PlayerController.Instance.state == PlayerState.Warrior)
+        {
+            OffAttackCollider();
+        }
+        isAttack = false;
+    }
 }

@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 10.0f;
 
     private Rigidbody2D rb;
-    private float moveInput;
+    private float moveInputX;
+    private float moveInputY;
 
     [Header("GroundCheck")]
     public bool isGrounded;
@@ -20,15 +21,25 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAttack playerAttack;
     private SpriteRenderer spriteRenderer;
 
-    [Header("Dash")]
-    public float dashSpeed = 10f;
-    public bool isDash = false;
-    public string dashStateName = "Dash";
+    //[Header("Dash")]
+    //public float dashSpeed = 10f;
+    //public bool isDash = false;
+    //public string dashStateName = "Dash";
 
     [Header("Slide")]
     public float slideSpeed = 10f;
     public bool isSlide = false;
     public string slideStateName = "Slide";
+
+    [Header("Teleport")]
+    public bool isTeleport = false;
+    public float teleportDistance = 5f;
+    public float teleportCoolTime = 1f;
+    [SerializeField]
+    private Vector2 teleportDirection = Vector2.zero;
+
+    [Header("Stats")]
+    private PlayerStats stats;
 
     private Animator animator;
 
@@ -39,45 +50,70 @@ public class PlayerMovement : MonoBehaviour
         playerAnimation = GetComponent<PlayerAnimation>();
         playerAttack = GetComponent<PlayerAttack>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        stats = GetComponent<PlayerStats>();
     }
 
     public void HandleMovement()
     {
-        if(!isDash && !isSlide && !PlayerController.Instance.isKnockback)
+        if (!isSlide && !PlayerController.Instance.isKnockback)
         {
-            moveInput = Input.GetAxisRaw("Horizontal");
+            moveInputX = Input.GetAxisRaw("Horizontal");
         }
+        moveInputY = Input.GetAxisRaw("Vertical");
+        moveInputY = Mathf.Clamp(moveInputY, 0, 1);
 
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        teleportDirection = new Vector2(moveInputX, moveInputY);
+
+        rb.linearVelocity = new Vector2(moveInputX * stats.moveSpeed, rb.linearVelocity.y);
 
         if (playerAttack.isAttack || playerAttack.isParrying)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocityY);
         }
 
-        if (rb.linearVelocityX > 0)
+        if (PlayerController.Instance.state == PlayerState.Warrior)
         {
-            spriteRenderer.flipX = false;
+            if (rb.linearVelocityX > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (rb.linearVelocityX < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
         }
-        else if(rb.linearVelocityX < 0)
+        else
         {
-            spriteRenderer.flipX = true;
+            if (rb.linearVelocityX > 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else if (rb.linearVelocityX < 0)
+            {
+                spriteRenderer.flipX = false;
+            }
         }
 
         if (playerAnimation != null)
         {
-            playerAnimation.SetWalking(moveInput != 0);
+            playerAnimation.SetWalking(moveInputX != 0);
         }
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        // 점프 후 착지 했는지 체크
-        playerAnimation.SetIsGrounded(isGrounded);
-        // 점프 후 떨어지는 애니메이션
-        playerAnimation.SetFall(rb.linearVelocityY);
+        if (PlayerController.Instance.state == PlayerState.Warrior)
+        {
+            // 점프 후 착지 했는지 체크
+            playerAnimation.SetIsGrounded(isGrounded);
+            // 점프 후 떨어지는 애니메이션
+            playerAnimation.SetFall(rb.linearVelocityY);
 
-        Jump();
-        //Dash();
-        Slide();
+            Jump();
+            Slide();
+        }
+        else
+        {
+            StartTeleport();
+        }
     }
 
 
@@ -85,64 +121,67 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X) && isGrounded)
         {
-
             SoundManager.Instance.PlaySFX(SFXType.Jump);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             playerAnimation.TriggerJump();
             playerAttack.isAttack = false;
             playerAttack.isParrying = false;
             playerAttack.OffAttackCollider();
-            //playerAttack.OffParryingCollider();
         }
     }
-    //private void Dash()
-    //{
-    //    if (!isGrounded || isDash || isSlide || (moveInput == 0))
-    //    {
-    //        return;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.C))
-    //    {
-    //        SoundManager.Instance.PlaySFX(SFXType.Dash);
-    //        isDash = true;
-    //        playerAttack.isAttack = false;
-    //        playerAttack.isParrying = false;
-    //        moveSpeed = dashSpeed;
-    //        playerAnimation.TriggerDash();
 
-    //        StartCoroutine(DashCooldownByAnimation());
-    //    }
-    //}
-
-    //private IEnumerator DashCooldownByAnimation()
-    //{
-    //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-    //    if (stateInfo.IsName(dashStateName))
-    //    {
-    //        float animationLength = stateInfo.length;
-    //        yield return new WaitForSeconds(animationLength);
-    //    }
-    //    else
-    //    {
-    //        yield return new WaitForSeconds(0.5f);
-    //    }
-    //    moveSpeed = walkSpeed;
-    //    isDash = false;
-    //}
-
-    private void Slide()
+    private void StartTeleport()
     {
-        if (!isGrounded || isDash || isSlide || (moveInput == 0))
+        if (!isGrounded || isTeleport)
         {
             return;
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
             SoundManager.Instance.PlaySFX(SFXType.Slide);
+            isTeleport = true;
+            playerAnimation.TriggerTeleport();
+
+            //float moveY = Input.GetAxisRaw("Vertical");
+            //if (moveY == 0)
+            //{
+            //    teleportDirection = new Vector2(0, moveY * teleportDistance);
+            //}
+            //else
+            //{
+            //    teleportDirection = new Vector2(moveInputX * teleportDistance, 0);
+            //}
+            StartCoroutine(TeleportCoolDown());
+        }
+    }
+
+    public void MoveTeleport()
+    {
+        Debug.Log("텔레포트");
+        transform.position += new Vector3(teleportDirection.x, teleportDirection.y, 0) * teleportDistance;
+    }
+
+    private IEnumerator TeleportCoolDown()
+    {
+        yield return new WaitForSeconds(teleportCoolTime);
+        teleportDirection = Vector2.zero;
+        isTeleport = false;
+    }
+
+    private void Slide()
+    {
+        if (!isGrounded || isSlide || (moveInputX == 0))
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+
+            SoundManager.Instance.PlaySFX(SFXType.Slide);
             isSlide = true;
             playerAttack.isAttack = false;
             playerAttack.isParrying = false;
-            moveSpeed = slideSpeed;
+            stats.moveSpeed = slideSpeed;
             playerAnimation.TriggerSlide();
             playerAttack.OffAttackCollider();
             //playerAttack.OffParryingCollider();
@@ -163,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
         }
-        moveSpeed = walkSpeed;
+        stats.moveSpeed = walkSpeed;
         PlayerController.Instance.isInvincible = false;
         isSlide = false;
     }

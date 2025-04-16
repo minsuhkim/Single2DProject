@@ -95,28 +95,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.5
-    functionName: OnParryingRange
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.625
-    functionName: OnAttackRange
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.625
-    functionName: OffParryingRange
+    functionName: OnAttackCollider
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1
-    functionName: OffAttackRange
+    functionName: OffAttackCollider
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
