@@ -20,12 +20,40 @@ public class PlayerAttack : MonoBehaviour
     public GameObject warriorAttack2RangeLeft;
     public GameObject warriorAttack2RangeRight;
 
+    [Header("Range Attack")]
+    [SerializeField]
+    private GameObject nearestEnemy;
+    public float detectRange = 5f;
+    public LayerMask enemyLayerMask;
+    public GameObject projectilePrefab;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerAnimation = GetComponent<PlayerAnimation>();
         animator = GetComponent<Animator>();
+    }
+
+    public void DetectNearestEnemy()
+    {
+        RaycastHit2D hit2D;
+        hit2D = Physics2D.CircleCast(transform.position, detectRange, Vector2.zero, 0, layerMask: enemyLayerMask);
+        if (hit2D)
+        {
+            nearestEnemy = hit2D.collider.gameObject;
+        }
+        else
+        {
+            nearestEnemy = null;
+        }
+    }
+
+    public void RangeAttack()
+    {
+        if (nearestEnemy)
+        {
+            Instantiate(projectilePrefab, nearestEnemy.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        }
     }
 
     public void PerformAttack()
@@ -54,6 +82,10 @@ public class PlayerAttack : MonoBehaviour
         {
             playerAnimation.TriggerAttack2();
             SoundManager.Instance.PlaySFX(SFXType.Attack);
+        }
+        if(PlayerController.Instance.state == PlayerState.Bringer)
+        {
+            DetectNearestEnemy();
         }
         StartCoroutine(Attack2Cooldown());
     }
