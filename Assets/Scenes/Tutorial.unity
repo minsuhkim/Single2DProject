@@ -38646,7 +38646,7 @@ Animator:
   m_GameObject: {fileID: 1771995705}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d77418a73f71e374687147ee0f342825, type: 2}
+  m_Controller: {fileID: 9100000, guid: 312496b25d842af4a938e96c7d5aaee0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -38733,6 +38733,12 @@ MonoBehaviour:
   bringerAttackRangeRight: {fileID: 1709332053}
   warriorAttack2RangeLeft: {fileID: 1637423672}
   warriorAttack2RangeRight: {fileID: 840990221}
+  nearestEnemy: {fileID: 0}
+  detectRange: 10
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  projectilePrefab: {fileID: 5607228827681692604, guid: a9ee2561599fd304e9ab4dca52764979, type: 3}
 --- !u!114 &1771995712
 MonoBehaviour:
   m_ObjectHideFlags: 0
