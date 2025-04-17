@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -22,7 +23,7 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Range Attack")]
     [SerializeField]
-    private GameObject nearestEnemy;
+    private List<GameObject> detectEnemy = new List<GameObject>();
     public float detectRange = 5f;
     public LayerMask enemyLayerMask;
     public GameObject projectilePrefab;
@@ -36,23 +37,27 @@ public class PlayerAttack : MonoBehaviour
 
     public void DetectNearestEnemy()
     {
-        RaycastHit2D hit2D;
-        hit2D = Physics2D.CircleCast(transform.position, detectRange, Vector2.zero, 0, layerMask: enemyLayerMask);
-        if (hit2D)
+        RaycastHit2D[] hits;
+        hits = Physics2D.CircleCastAll(transform.position, detectRange, Vector2.zero, 0, layerMask: enemyLayerMask);
+        if (hits.Length > 0)
         {
-            nearestEnemy = hit2D.collider.gameObject;
-        }
-        else
-        {
-            nearestEnemy = null;
+            foreach(var hit in hits)
+            {
+                detectEnemy.Add(hit.collider.gameObject);
+            }
         }
     }
 
     public void RangeAttack()
     {
-        if (nearestEnemy)
+        if (detectEnemy.Count > 0)
         {
-            Instantiate(projectilePrefab, nearestEnemy.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            for(int i=0; i<detectEnemy.Count; i++)
+            {
+                Instantiate(projectilePrefab, detectEnemy[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                detectEnemy[i].GetComponent<Enemy>().TakeDamage(PlayerController.Instance.stats.damage);
+            }
+            detectEnemy.Clear();
         }
     }
 
@@ -148,16 +153,7 @@ public class PlayerAttack : MonoBehaviour
         isAttack = true;
         //안정성을 위함(다음 프레임까지 대기)
         yield return null;
-        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //if (stateInfo.IsName(attackStateName))
-        //{
-        //    float animationLength = stateInfo.length;
-        //    yield return new WaitForSeconds(PlayerStats.Instance.warriorAttackSpeed);
-        //}
-        //else
-        //{
-        //    yield return new WaitForSeconds(0.5f);
-        //}
+
         yield return new WaitForSeconds(PlayerStats.Instance.attackSpeed);
         OffAttackCollider();
         isAttack = false;
@@ -168,16 +164,7 @@ public class PlayerAttack : MonoBehaviour
         isAttack = true;
         //안정성을 위함(다음 프레임까지 대기)
         yield return null;
-        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //if (stateInfo.IsName(attackStateName))
-        //{
-        //    float animationLength = stateInfo.length;
-        //    yield return new WaitForSeconds(PlayerStats.Instance.warriorAttackSpeed);
-        //}
-        //else
-        //{
-        //    yield return new WaitForSeconds(0.5f);
-        //}
+
         yield return new WaitForSeconds(PlayerStats.Instance.attack2Speed);
         if (PlayerController.Instance.state == PlayerState.Warrior)
         {

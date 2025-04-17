@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     public bool isTeleport = false;
     public float teleportDistance = 5f;
     public float teleportCoolTime = 1f;
-    [SerializeField]
     private Vector2 teleportDirection = Vector2.zero;
 
     [Header("Stats")]
@@ -108,7 +107,10 @@ public class PlayerMovement : MonoBehaviour
             playerAnimation.SetFall(rb.linearVelocityY);
 
             Jump();
-            Slide();
+            if(PlayerController.Instance.stats.level > 1)
+            {
+                Slide();
+            }
         }
         else
         {
@@ -157,7 +159,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void MoveTeleport()
     {
-        Debug.Log("텔레포트");
         transform.position += new Vector3(teleportDirection.x, teleportDirection.y, 0) * teleportDistance;
     }
 

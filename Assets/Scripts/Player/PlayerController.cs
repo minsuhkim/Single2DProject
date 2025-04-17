@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public PlayerState state = PlayerState.Warrior;
 
     [Header("Stat")]
-    private PlayerStats stats;
+    public PlayerStats stats;
 
     private void Awake()
     {
@@ -79,12 +79,17 @@ public class PlayerController : MonoBehaviour
             attack.PerformAttack();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isSlide)
+        if (stats.level > 0 && movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isSlide)
         {
             attack.PerformAttack2();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide)
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            stats.LevelUp();
+        }
+
+        if (stats.level > 2 &&  movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide && !attack.isAttack)
         {
             if(state == PlayerState.Warrior)
             {
@@ -99,11 +104,7 @@ public class PlayerController : MonoBehaviour
 
                 stats.SetStats(state);
         }
-
-        //if (movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isDash && !movement.isSlide && !attack.isAttack)
-        //{
-        //    attack.PerformParrying();
-        //}
+         
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -173,15 +174,6 @@ public class PlayerController : MonoBehaviour
     IEnumerator Invincibility()
     {
         isInvincible = true;
-        //Time.timeScale = 0.5f;
-        //float elapsedTime = 0f;
-        //float blinkInterval = 0.2f;
-
-        //while(elapsedTime < invincibilityDuration)
-        //{
-        //    elapsedTime += Time.deltaTime;
-        //    yield return null;
-        //}
         yield return new WaitForSeconds(invincibilityDuration);
         Time.timeScale = 1f;
         isInvincible = false;

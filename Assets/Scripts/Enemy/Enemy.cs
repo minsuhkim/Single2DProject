@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
- public enum EnemyType
+public enum EnemyType
 {
     None, Bringer, ArchDemon, Elf, Druid, DemonKin,
 }
@@ -13,7 +13,8 @@ public enum EnemyState
     Chase,
     Attack,
     Idle,
-    Stun
+    Dead,
+    //TakeDamage
 }
 
 public class Enemy : MonoBehaviour
@@ -23,15 +24,12 @@ public class Enemy : MonoBehaviour
     public EnemyType type;
 
     [Header("Move")]
-    public float speed = 2.0f;
     public float maxDistance = 3.0f;
-    private Vector3 startPos;
-    private int direction = 1;
+    protected Vector3 startPos;
+    protected int direction = 1;
 
-    private float enemyHP = 100;
-
-    private Color originColor;
-    private Renderer objectRenderer;
+    protected Color originColor;
+    protected Renderer objectRenderer;
     public float colorChangeDuration = .05f;
 
     [Header("attack effect transform")]
@@ -41,24 +39,42 @@ public class Enemy : MonoBehaviour
     public float magnitude = 0.03f;
 
     [Header("Chase")]
-    public Transform target;
+    [SerializeField]
+    protected Transform target;
+    protected float chaseDistance = 5f;
 
     [Header("Attack")]
     public bool isAttack = false;
-    public GameObject attackRangeLeft;
-    public GameObject attackRangeRight;
+    protected float attackDistance = 2f;
+    //public GameObject attackRangeLeft;
+    //public GameObject attackRangeRight;
 
-    [Header("Parrying")]
-    public GameObject parryingRangeLeft;
-    public GameObject parryingRangeRight;
+    [Header("Dead")]
+    protected float deadTime = 1f;
 
     [Header("Wait")]
     public bool isWait = false;
 
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
+    [Header("Stats")]
+    [SerializeField]
+    protected int maxHP;
+    [SerializeField]
+    protected int curHP;
+    [SerializeField]
+    protected int damage;
+    [SerializeField]
+    protected float moveSpeed;
+    [SerializeField]
+    protected float attackSpeed;
+    [SerializeField]
+    protected EnemyData statData;
 
-    void Start()
+    protected Animator animator;
+    protected SpriteRenderer spriteRenderer;
+
+    protected Coroutine curCoroutine;
+
+    protected virtual void Start()
     {
         if (!(type == EnemyType.None))
         {
@@ -72,160 +88,64 @@ public class Enemy : MonoBehaviour
         startPos = transform.position;
 
         target = PlayerController.Instance.transform;
-    }
-
-    void Update()
-    {
-        if(type == EnemyType.None)
-        {
-            return;
-        }
-        switch (currentState)
-        {
-            case EnemyState.Patrol:
-                Patrol();
-                break;
-            case EnemyState.Chase:
-                Chase();
-                break;
-            case EnemyState.Attack:
-                Attack();
-                break;
-            case EnemyState.Idle:
-                Idle();
-                break;
-            case EnemyState.Stun:
-                Stun();
-                break;
-        }
-    }
-
-
-    public void ChangeState(EnemyState state)
-    {
-        if (type == EnemyType.None || isWait)
-        {
-            return;
-        }
-        this.currentState = state;
-        Debug.Log(currentState);
-    }
-
-    private void Stun()
-    {
-        //StopAllCoroutines();
-        OffAttackRange();
-        animator.SetBool("isWalk", false);
-        animator.SetTrigger("Stun");
-        StartCoroutine(StunCoroutine());
-    }
-
-    private void Idle()
-    {
-        animator.SetBool("isWalk", false);
-        StartCoroutine(IdleCoroutine());
-    }
-
-    private void Chase()
-    {
-        if (isAttack)
-        {
-            return;
-        }
-
-        animator.SetBool("isWalk", true);
-        direction = (target.position.x - transform.position.x) > 0 ? 1 : -1;
-        spriteRenderer.flipX = direction == 1 ? true : false;
-        transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
-    }
-
-    private void Patrol()
-    {
-        if (isAttack)
-        {
-            return;
-        }
-
-        animator.SetBool("isWalk", true);
 
         if (type != EnemyType.None)
         {
-            if (transform.position.x > startPos.x + maxDistance)
-            {
-                direction = -1;
-
-            }
-            else if (transform.position.x < startPos.x - maxDistance)
-            {
-                direction = 1;
-            }
-            spriteRenderer.flipX = direction == 1 ? true : false;
-            transform.position += new Vector3(speed * direction * Time.deltaTime, 0, 0);
+            maxHP = statData.maxHP;
+            curHP = maxHP;
+            damage = statData.damage;
+            moveSpeed = statData.moveSpeed;
+            attackSpeed = statData.attackSpeed;
+            ChangeState(EnemyState.Patrol);
         }
-
     }
 
-    private void Attack()
+    protected virtual void ChangeState(EnemyState state)
     {
-        if (isAttack)
+        currentState = state;
+
+        if (curCoroutine != null)
         {
-            return;
+            StopCoroutine(curCoroutine);
         }
 
-        direction = (target.position.x - transform.position.x) > 0 ? 1 : -1;
-        spriteRenderer.flipX = direction == 1 ? true : false;
-
-        if (animator != null)
+        switch (state)
         {
-            animator.SetTrigger("Attack");
+            case EnemyState.Attack:
+                curCoroutine = StartCoroutine(AttackCoroutine());
+                break;
+            case EnemyState.Patrol:
+                curCoroutine = StartCoroutine(PatrolCoroutine());
+                break;
+            case EnemyState.Idle:
+                curCoroutine = StartCoroutine(IdleCoroutine());
+                break;
+            case EnemyState.Dead:
+                curCoroutine = StartCoroutine(DeadCoroutine());
+                break;
         }
-
-        StartCoroutine(AttackCoroutine());
     }
 
-    public void OnAttackRange()
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (spriteRenderer.flipX)
+        if (collision.tag == "PlayerAttack")
         {
-            attackRangeRight.SetActive(true);
+            int damage = collision.GetComponentInParent<PlayerStats>().damage;
+            TakeDamage(damage);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        curHP -= damage;
+        if (curHP <= 0)
+        {
+            ChangeState(EnemyState.Dead);
         }
         else
         {
-            attackRangeLeft.SetActive(true);
-        }
-    }
-
-    public void OffAttackRange()
-    {
-        attackRangeLeft.SetActive(false);
-        attackRangeRight.SetActive(false);
-    }
-
-    public void OnParryingRange()
-    {
-        if (spriteRenderer.flipX)
-        {
-            parryingRangeRight.SetActive(true);
-        }
-        else
-        {
-            parryingRangeLeft.SetActive(true);
-        }
-    }
-
-    public void OffParryingRange()
-    {
-        parryingRangeRight.SetActive(false);
-        parryingRangeLeft.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "PlayerAttack")
-        {
-            Debug.Log("플레이어한테 공격 당함");
             StartCoroutine(HitCoroutine());
-            if(particleTransform.Length > 0)
+            if (particleTransform.Length > 0)
             {
                 int randIndex = Random.Range(0, particleTransform.Length);
                 ParticleManager.Instance.ParticlePlay(ParticleType.PlayerAttack, particleTransform[randIndex].position, Vector3.one);
@@ -233,9 +153,60 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private IEnumerator HitCoroutine()
+    protected virtual IEnumerator PatrolCoroutine()
     {
-        Debug.Log("공격 성공");
+        animator.SetBool("isMove", true);
+
+        while (currentState == EnemyState.Patrol)
+        {
+            if (transform.position.x > startPos.x + maxDistance)
+            {
+                animator.SetBool("isMove", false);
+                yield return new WaitForSeconds(0.5f);
+                animator.SetBool("isMove", true);
+                direction = -1;
+
+            }
+            else if (transform.position.x < startPos.x - maxDistance)
+            {
+                animator.SetBool("isMove", false);
+                yield return new WaitForSeconds(0.5f);
+                animator.SetBool("isMove", true);
+                direction = 1;
+            }
+            spriteRenderer.flipX = direction == -1 ? true : false;
+            transform.position += new Vector3(moveSpeed * direction * Time.deltaTime, 0, 0);
+
+            float distance = Vector2.Distance(target.transform.position, transform.position);
+            if (distance < attackDistance)
+            {
+                ChangeState(EnemyState.Attack);
+            }
+            yield return null;
+        }
+    }
+
+    //protected virtual IEnumerator ChaseCoroutine()
+    //{
+    //    if (curCoroutine != null)
+    //    {
+    //        StopCoroutine(curCoroutine);
+    //    }
+
+    //    yield return null;
+    //}
+
+    protected virtual IEnumerator DeadCoroutine()
+    {
+        CameraManager.Instance.StartCameraShake(duration * 1.5f, magnitude * 1.5f);
+        animator.SetTrigger("Dead");
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(stateInfo.length);
+        Destroy(gameObject);
+    }
+
+    protected virtual IEnumerator HitCoroutine()
+    {
         SoundManager.Instance.PlaySFX(SFXType.Hit);
         CameraManager.Instance.StartCameraShake(duration, magnitude);
         objectRenderer.material.color = Color.red;
@@ -243,65 +214,119 @@ public class Enemy : MonoBehaviour
         objectRenderer.material.color = originColor;
     }
 
-    private IEnumerator AttackCoroutine()
+    protected virtual IEnumerator AttackCoroutine()
     {
-        isAttack = true;
         yield return null;
-
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        if (stateInfo.IsName("Attack"))
-        {
-            float animationLength = stateInfo.length;
-            yield return new WaitForSeconds(animationLength);
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
-        ChangeState(EnemyState.Idle);
-        isAttack = false;
     }
 
-    private IEnumerator IdleCoroutine()
+    protected virtual IEnumerator IdleCoroutine()
     {
         isWait = true;
         yield return new WaitForSeconds(1f);
         isWait = false;
 
-        float distance = Mathf.Abs(target.position.x - transform.position.x);
-        if(distance < 2)
+        float distance = Vector2.Distance(target.transform.position, transform.position);
+        if (distance < attackDistance)
         {
+            //ChangeState(EnemyState.Attack);
             ChangeState(EnemyState.Attack);
-        }
-        else if(distance < 5)
-        {
-            ChangeState(EnemyState.Chase);
         }
         else
         {
+            //ChangeState(EnemyState.Patrol);
             ChangeState(EnemyState.Patrol);
         }
     }
 
-    private IEnumerator StunCoroutine()
-    {
-        isWait = true;
-        yield return new WaitForSeconds(1.5f);
-        isWait = false;
+    //public void ChangeState(EnemyState state)
+    //{
+    //    if (type == EnemyType.None || isWait)
+    //    {
+    //        return;
+    //    }
+    //    this.currentState = state;
+    //    Debug.Log(currentState);
+    //}
 
-        float distance = Mathf.Abs(target.position.x - transform.position.x);
-        if (distance < 2)
-        {
-            ChangeState(EnemyState.Attack);
-        }
-        else if (distance < 5)
-        {
-            ChangeState(EnemyState.Chase);
-        }
-        else
-        {
-            ChangeState(EnemyState.Patrol);
-        }
-    }
+
+    //private void Idle()
+    //{
+    //    animator.SetBool("isWalk", false);
+    //    StartCoroutine(IdleCoroutine());
+    //}
+
+    //private void Chase()
+    //{
+    //    if (isAttack)
+    //    {
+    //        return;
+    //    }
+
+    //    animator.SetBool("isWalk", true);
+    //    direction = (target.position.x - transform.position.x) > 0 ? 1 : -1;
+    //    spriteRenderer.flipX = direction == 1 ? true : false;
+    //    transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
+    //}
+
+    //private void Patrol()
+    //{
+    //    if (isAttack)
+    //    {
+    //        return;
+    //    }
+
+    //    animator.SetBool("isWalk", true);
+
+    //    if (type != EnemyType.None)
+    //    {
+    //        if (transform.position.x > startPos.x + maxDistance)
+    //        {
+    //            direction = -1;
+
+    //        }
+    //        else if (transform.position.x < startPos.x - maxDistance)
+    //        {
+    //            direction = 1;
+    //        }
+    //        spriteRenderer.flipX = direction == 1 ? true : false;
+    //        transform.position += new Vector3(speed * direction * Time.deltaTime, 0, 0);
+    //    }
+
+    //}
+
+    //private void Attack()
+    //{
+    //    if (isAttack)
+    //    {
+    //        return;
+    //    }
+
+    //    direction = (target.position.x - transform.position.x) > 0 ? 1 : -1;
+    //    spriteRenderer.flipX = direction == 1 ? true : false;
+
+    //    if (animator != null)
+    //    {
+    //        animator.SetTrigger("Attack");
+    //    }
+
+    //    StartCoroutine(AttackCoroutine());
+    //}
+
+    //public void OnAttackRange()
+    //{
+    //    if (spriteRenderer.flipX)
+    //    {
+    //        attackRangeRight.SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        attackRangeLeft.SetActive(true);
+    //    }
+    //}
+
+    //public void OffAttackRange()
+    //{
+    //    attackRangeLeft.SetActive(false);
+    //    attackRangeRight.SetActive(false);
+    //}
 }

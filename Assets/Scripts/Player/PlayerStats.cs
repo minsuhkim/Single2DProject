@@ -25,6 +25,7 @@ public class PlayerStats : MonoBehaviour
     public float attackSpeed;
     public float attack2Speed;
     public float moveSpeed;
+    public int level = 0;
 
 
     private void Awake()
@@ -90,6 +91,11 @@ public class PlayerStats : MonoBehaviour
     public void Die()
     {
         // GameOver Ã¢ ½ÃÀÛ
+    }
+
+    public void LevelUp()
+    {
+        level++;
     }
 
     public int GetDamage() => warriorDamage;
