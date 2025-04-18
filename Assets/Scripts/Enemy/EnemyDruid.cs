@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class EnemyDruid : Enemy
 {
+    [Header("Projectile")]
+    public GameObject projectilePrefab;
+
+    private Vector3 rangeAttackPos;
+
     protected override void Start()
     {
         base.Start();
@@ -31,5 +36,15 @@ public class EnemyDruid : Enemy
         {
             ChangeState(EnemyState.Patrol);
         }
+    }
+
+    public void SetRangeAttackPosition()
+    {
+        rangeAttackPos = target.GetComponentsInChildren<Transform>()[1].position;
+    }
+
+    public void RangeAttack()
+    {
+        Instantiate(projectilePrefab, rangeAttackPos, Quaternion.identity);
     }
 }

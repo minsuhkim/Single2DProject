@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -150,12 +150,12 @@ TextureImporter:
       name: forrest_mage_death_0
       rect:
         serializedVersion: 2
-        x: 36
+        x: 31
         y: 0
-        width: 51
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 56
+        height: 62
+      alignment: 9
+      pivot: {x: 0.45, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -169,72 +169,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forrest_mage_death_1
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 28
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5c3369dffae17d210800000000000000
-      internalID: 1357587553898083269
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_death_2
-      rect:
-        serializedVersion: 2
-        x: 159
-        y: 0
-        width: 55
-        height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5cd17380655f11860800000000000000
-      internalID: 7499044604402408901
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_death_3
-      rect:
-        serializedVersion: 2
-        x: 202
-        y: 28
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7456f3175664bd980800000000000000
-      internalID: -8513133269108169401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: forrest_mage_death_4
       rect:
         serializedVersion: 2
@@ -242,8 +176,8 @@ TextureImporter:
         y: 0
         width: 59
         height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.38, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -263,9 +197,9 @@ TextureImporter:
         x: 405
         y: 0
         width: 59
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.38, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -285,9 +219,9 @@ TextureImporter:
         x: 528
         y: 0
         width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.47, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -307,9 +241,9 @@ TextureImporter:
         x: 651
         y: 0
         width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.47, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -322,11 +256,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: forrest_mage_death_1
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 0
+        width: 59
+        height: 62
+      alignment: 9
+      pivot: {x: 0.45, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b6fb0f831eee5a4eb765a7b85af102f
+      internalID: 1357587553898083269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f932ce9ef1fa240429bfaca2eabdf705
     internalID: 0
     vertices: []
     indices: 
@@ -335,7 +291,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      forrest_mage_death_0: 4301836512019020886
+      forrest_mage_death_1: 1357587553898083269
+      forrest_mage_death_2: 7499044604402408901
+      forrest_mage_death_3: -8513133269108169401
+      forrest_mage_death_4: 8145736510606994555
+      forrest_mage_death_5: 6311919182261460314
+      forrest_mage_death_6: 5922280441638797770
+      forrest_mage_death_7: -6220406859002781073
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

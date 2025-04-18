@@ -177,3 +177,4 @@ MonoBehaviour:
   moveSpeed: 0
   attackSpeed: 0
   statData: {fileID: 11400000, guid: 9b4f0819b54d9724da2e240f8ce55b8f, type: 2}
+  projectilePrefab: {fileID: 7771138030876282950, guid: 770379d1d7ee7f14a8896dc2b5f50762, type: 3}

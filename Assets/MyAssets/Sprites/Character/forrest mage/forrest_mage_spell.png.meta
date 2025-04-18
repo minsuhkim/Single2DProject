@@ -85,7 +85,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -177,12 +177,12 @@ TextureImporter:
       name: forrest_mage_spell_0
       rect:
         serializedVersion: 2
-        x: 19
-        y: 11
-        width: 29
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 18
+        y: 0
+        width: 72
+        height: 52
+      alignment: 9
+      pivot: {x: 0.545698, y: 0.3450001}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -199,19 +199,19 @@ TextureImporter:
       name: forrest_mage_spell_1
       rect:
         serializedVersion: 2
-        x: 43
+        x: 141
         y: 0
-        width: 47
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 72
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5451726, y: 0.34512296}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8a43ba48996806910800000000000000
+      spriteID: 8bfea03858c56cb42a40b22ead5c1c85
       internalID: 1828609442626352296
       vertices: []
       indices: 
@@ -221,19 +221,19 @@ TextureImporter:
       name: forrest_mage_spell_2
       rect:
         serializedVersion: 2
-        x: 141
-        y: 11
-        width: 30
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 264
+        y: 0
+        width: 71
+        height: 52
+      alignment: 9
+      pivot: {x: 0.55235314, y: 0.34810135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 47c5f5f9e6a09daa0800000000000000
+      spriteID: 765f3fc0b5b4f904286a59aeb32a4a7c
       internalID: -6135861547079082892
       vertices: []
       indices: 
@@ -243,19 +243,19 @@ TextureImporter:
       name: forrest_mage_spell_3
       rect:
         serializedVersion: 2
-        x: 166
+        x: 387
         y: 0
-        width: 47
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 71
+        height: 52
+      alignment: 9
+      pivot: {x: 0.55205697, y: 0.34815428}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9a4d2e5a7adbd5480800000000000000
+      spriteID: c849862d308814b4d821d67303fb8c3f
       internalID: -8908755960128678743
       vertices: []
       indices: 
@@ -265,19 +265,19 @@ TextureImporter:
       name: forrest_mage_spell_4
       rect:
         serializedVersion: 2
-        x: 264
+        x: 509
         y: 0
-        width: 51
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 72
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5577986, y: 0.34883592}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 892a58998f311dfd0800000000000000
+      spriteID: 030312eae7d95644cbc769b6e20f0c4b
       internalID: -2319050374670605672
       vertices: []
       indices: 
@@ -287,262 +287,20 @@ TextureImporter:
       name: forrest_mage_spell_5
       rect:
         serializedVersion: 2
-        x: 313
-        y: 0
-        width: 22
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7821004ed598615a0800000000000000
-      internalID: -6550897571613633913
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_6
-      rect:
-        serializedVersion: 2
-        x: 387
-        y: 0
-        width: 51
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e1e56d2fcf2c8da10800000000000000
-      internalID: 1934510431617310238
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_7
-      rect:
-        serializedVersion: 2
-        x: 436
-        y: 0
-        width: 22
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: aab963be6cead3fa0800000000000000
-      internalID: -5819302974119830614
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_8
-      rect:
-        serializedVersion: 2
-        x: 509
-        y: 23
-        width: 36
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a1efde99b08d8ed20800000000000000
-      internalID: 3308131470642380314
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_9
-      rect:
-        serializedVersion: 2
-        x: 535
-        y: 0
-        width: 26
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 63e8c2e525a8bd650800000000000000
-      internalID: 6258748193533365814
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_10
-      rect:
-        serializedVersion: 2
-        x: 559
-        y: 0
-        width: 22
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e70d45b27a733eb60800000000000000
-      internalID: 7774118572897652862
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_11
-      rect:
-        serializedVersion: 2
-        x: 658
-        y: 0
-        width: 26
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 47c2fa1f4b87a7db0800000000000000
-      internalID: -4793386134838236044
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_12
-      rect:
-        serializedVersion: 2
-        x: 682
-        y: 0
-        width: 22
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7f41263e0895bd250800000000000000
-      internalID: 5970464141115266295
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_13
-      rect:
-        serializedVersion: 2
-        x: 283
-        y: 11
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cae6ee928c7885f10800000000000000
-      internalID: 2258704506893004460
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_14
-      rect:
-        serializedVersion: 2
-        x: 406
-        y: 11
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5f609b5444d881380800000000000000
-      internalID: -9000288530932889867
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_15
-      rect:
-        serializedVersion: 2
-        x: 529
-        y: 11
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b9ef956c68dd04f40800000000000000
-      internalID: 5710807898428931739
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forrest_mage_spell_16
-      rect:
-        serializedVersion: 2
         x: 652
-        y: 11
-        width: 11
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 52
+        height: 52
+      alignment: 9
+      pivot: {x: 0.3844053, y: 0.34587207}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 10d429c092f5c0160800000000000000
-      internalID: 6993068951308750081
+      spriteID: 6ca1b2b7dda05f647a7917a22301ad5c
+      internalID: -6550897571613633913
       vertices: []
       indices: 
       edges: []
@@ -551,7 +309,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 0ab2633487e4e83458ce5a00919b8807
     internalID: 0
     vertices: []
     indices: 
@@ -560,7 +318,24 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      forrest_mage_spell_0: 3109506389342999609
+      forrest_mage_spell_1: 1828609442626352296
+      forrest_mage_spell_10: 7774118572897652862
+      forrest_mage_spell_11: -4793386134838236044
+      forrest_mage_spell_12: 5970464141115266295
+      forrest_mage_spell_13: 2258704506893004460
+      forrest_mage_spell_14: -9000288530932889867
+      forrest_mage_spell_15: 5710807898428931739
+      forrest_mage_spell_16: 6993068951308750081
+      forrest_mage_spell_2: -6135861547079082892
+      forrest_mage_spell_3: -8908755960128678743
+      forrest_mage_spell_4: -2319050374670605672
+      forrest_mage_spell_5: -6550897571613633913
+      forrest_mage_spell_6: 1934510431617310238
+      forrest_mage_spell_7: -5819302974119830614
+      forrest_mage_spell_8: 3308131470642380314
+      forrest_mage_spell_9: 6258748193533365814
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

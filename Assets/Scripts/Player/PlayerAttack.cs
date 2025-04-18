@@ -46,6 +46,13 @@ public class PlayerAttack : MonoBehaviour
                 detectEnemy.Add(hit.collider.gameObject);
             }
         }
+        else
+        {
+            if(detectEnemy.Count > 0)
+            {
+                detectEnemy.Clear();
+            }
+        }
     }
 
     public void RangeAttack()
@@ -54,6 +61,10 @@ public class PlayerAttack : MonoBehaviour
         {
             for(int i=0; i<detectEnemy.Count; i++)
             {
+                if (!detectEnemy[i].GetComponent<Enemy>().isLive)
+                {
+                    continue;
+                }
                 Instantiate(projectilePrefab, detectEnemy[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
                 detectEnemy[i].GetComponent<Enemy>().TakeDamage(PlayerController.Instance.stats.damage);
             }

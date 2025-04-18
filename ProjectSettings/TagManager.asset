@@ -10,8 +10,6 @@ TagManager:
   - Enemy
   - PlayerAttack
   - EnemyAttack
-  - PlayerParrying
-  - EnemyParrying
   layers:
   - Default
   - TransparentFX

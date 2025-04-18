@@ -143,16 +143,6 @@ public class PlayerMovement : MonoBehaviour
             SoundManager.Instance.PlaySFX(SFXType.Slide);
             isTeleport = true;
             playerAnimation.TriggerTeleport();
-
-            //float moveY = Input.GetAxisRaw("Vertical");
-            //if (moveY == 0)
-            //{
-            //    teleportDirection = new Vector2(0, moveY * teleportDistance);
-            //}
-            //else
-            //{
-            //    teleportDirection = new Vector2(moveInputX * teleportDistance, 0);
-            //}
             StartCoroutine(TeleportCoolDown());
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum EnemyType
 {
-    None, Bringer, ArchDemon, Elf, Druid, DemonKin,
+    None, Bringer, ArchDemon, Elf, Druid, DemonKin, Mage, Knight
 }
 
 public enum EnemyState
@@ -14,7 +14,6 @@ public enum EnemyState
     Attack,
     Idle,
     Dead,
-    //TakeDamage
 }
 
 public class Enemy : MonoBehaviour
@@ -41,30 +40,28 @@ public class Enemy : MonoBehaviour
     [Header("Chase")]
     [SerializeField]
     protected Transform target;
+    [SerializeField]
     protected float chaseDistance = 5f;
 
     [Header("Attack")]
     public bool isAttack = false;
+    [SerializeField]
     protected float attackDistance = 2f;
     //public GameObject attackRangeLeft;
     //public GameObject attackRangeRight;
 
     [Header("Dead")]
     protected float deadTime = 1f;
+    public bool isLive = true;
 
     [Header("Wait")]
     public bool isWait = false;
 
     [Header("Stats")]
-    [SerializeField]
     protected int maxHP;
-    [SerializeField]
     protected int curHP;
-    [SerializeField]
     protected int damage;
-    [SerializeField]
     protected float moveSpeed;
-    [SerializeField]
     protected float attackSpeed;
     [SerializeField]
     protected EnemyData statData;
@@ -198,11 +195,13 @@ public class Enemy : MonoBehaviour
 
     protected virtual IEnumerator DeadCoroutine()
     {
+        isLive = false;
         CameraManager.Instance.StartCameraShake(duration * 1.5f, magnitude * 1.5f);
         animator.SetTrigger("Dead");
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSeconds(stateInfo.length);
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     protected virtual IEnumerator HitCoroutine()

@@ -49,7 +49,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -141,12 +141,12 @@ TextureImporter:
       name: forrest_mage_teleport2_0
       rect:
         serializedVersion: 2
-        x: 73
-        y: 35
-        width: 262
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 651
+        y: 0
+        width: 53
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -163,19 +163,19 @@ TextureImporter:
       name: forrest_mage_teleport2_1
       rect:
         serializedVersion: 2
-        x: 420
-        y: 30
-        width: 15
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 529
+        y: 0
+        width: 53
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: db9e382b66875f130800000000000000
+      spriteID: 2b7d5d29d3b465d48959b75c2f9f680f
       internalID: 3599915859629566397
       vertices: []
       indices: 
@@ -185,19 +185,19 @@ TextureImporter:
       name: forrest_mage_teleport2_2
       rect:
         serializedVersion: 2
-        x: 436
-        y: 30
-        width: 22
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 405
+        y: 0
+        width: 53
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dd736be73bc8b9e50800000000000000
+      spriteID: 261b5fe87a9acf3478e27a31a105cf5a
       internalID: 6817197163508283357
       vertices: []
       indices: 
@@ -207,19 +207,19 @@ TextureImporter:
       name: forrest_mage_teleport2_3
       rect:
         serializedVersion: 2
-        x: 529
-        y: 15
+        x: 282
+        y: 0
         width: 53
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 89912960522bf1dd0800000000000000
+      spriteID: d93e26a814137dd45ab43d2cd68fc4a1
       internalID: -2513094194955675240
       vertices: []
       indices: 
@@ -229,20 +229,42 @@ TextureImporter:
       name: forrest_mage_teleport2_4
       rect:
         serializedVersion: 2
-        x: 650
+        x: 158
         y: 0
-        width: 54
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 53
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dad785774fd9b42b0800000000000000
+      spriteID: 69894dd0ff1d5e54786c278c1d6a9091
       internalID: -5599208038405210707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forrest_mage_teleport2_5
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 0
+        width: 53
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29525c2eacf7de248aadbef39270f71e
+      internalID: 1211834305
       vertices: []
       indices: 
       edges: []
@@ -251,7 +273,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 26082aad91b6ccb47b1ee686a0bef91c
     internalID: 0
     vertices: []
     indices: 
@@ -260,7 +282,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      forrest_mage_teleport2_0: -565506079939689760
+      forrest_mage_teleport2_1: 3599915859629566397
+      forrest_mage_teleport2_2: 6817197163508283357
+      forrest_mage_teleport2_3: -2513094194955675240
+      forrest_mage_teleport2_4: -5599208038405210707
+      forrest_mage_teleport2_5: 1211834305
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
