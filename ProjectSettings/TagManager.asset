@@ -10,6 +10,9 @@ TagManager:
   - Enemy
   - PlayerAttack
   - EnemyAttack
+  - Item
+  - Door
+  - EnterBossRoom
   layers:
   - Default
   - TransparentFX

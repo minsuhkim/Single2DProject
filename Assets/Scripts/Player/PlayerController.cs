@@ -84,10 +84,10 @@ public class PlayerController : MonoBehaviour
             attack.PerformAttack2();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            stats.LevelUp();
-        }
+        //if (Input.GetKeyDown(KeyCode.LeftControl))
+        //{
+        //    stats.LevelUp();
+        //}
 
         if (stats.level > 2 &&  movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide && !attack.isAttack)
         {
@@ -153,6 +153,17 @@ public class PlayerController : MonoBehaviour
         else if (collision.tag == "EnemyAttack")
         {
             Hurt(collision.transform);
+        }
+        else if(collision.tag == "Door")
+        {
+            // 일단 하드 코딩으로 씬 넘겨주기
+            SceneManagerController.Instance.StartSceneTransition("Chapter1");
+        }
+        else if(collision.tag == "Item")
+        {
+            // 해금
+            stats.LevelUp();
+            collision.gameObject.SetActive(false);
         }
     }
 
