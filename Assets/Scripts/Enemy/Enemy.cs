@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
 
 public enum EnemyType
@@ -70,6 +69,9 @@ public class Enemy : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
 
     protected Coroutine curCoroutine;
+
+    [Header("BossSpawn")]
+    public BossSpawner bossSpawner;
 
     protected virtual void Start()
     {
@@ -163,6 +165,10 @@ public class Enemy : MonoBehaviour
         curHP -= damage;
         if (curHP <= 0)
         {
+            if (bossSpawner != null)
+            {
+                bossSpawner.KillEnemy();
+            }
             ChangeState(EnemyState.Dead);
         }
         else

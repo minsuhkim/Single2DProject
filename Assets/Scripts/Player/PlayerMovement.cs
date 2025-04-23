@@ -21,10 +21,8 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAttack playerAttack;
     private SpriteRenderer spriteRenderer;
 
-    //[Header("Dash")]
-    //public float dashSpeed = 10f;
-    //public bool isDash = false;
-    //public string dashStateName = "Dash";
+    [Header("Jump")]
+    public bool isJumpKeyDown = false;
 
     [Header("Slide")]
     public float slideSpeed = 10f;
@@ -107,7 +105,15 @@ public class PlayerMovement : MonoBehaviour
             playerAnimation.SetFall(rb.linearVelocityY);
 
             Jump();
-            if(PlayerController.Instance.stats.level > 1)
+            if (isJumpKeyDown)
+            {
+                rb.gravityScale = 1;
+            }
+            else
+            {
+                rb.gravityScale = 2;
+            }
+            if (PlayerController.Instance.stats.level > 1)
             {
                 Slide();
             }
@@ -123,12 +129,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X) && isGrounded)
         {
+            isJumpKeyDown = true;
             SoundManager.Instance.PlaySFX(SFXType.Jump);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             playerAnimation.TriggerJump();
             playerAttack.isAttack = false;
             playerAttack.isParrying = false;
             playerAttack.OffAttackCollider();
+        }
+        else if (Input.GetKeyUp(KeyCode.X))
+        {
+            isJumpKeyDown = false;
         }
     }
 

@@ -11,7 +11,12 @@ public class BossMage : Boss
     {
         yield return new WaitForSeconds(patternChangeTime);
 
-        if (isLive)
+        if (bossState == BossState.Idle)
+        {
+            StartCoroutine(Think());
+        }
+
+        else if (isLive)
         {
             int pattern = Random.Range(0, 2);
             switch (pattern)
@@ -61,5 +66,6 @@ public class BossMage : Boss
         GetComponent<CapsuleCollider2D>().enabled = false;
         StopAllCoroutines();
         // 게임클리어
+        GameManager.Instance.GameClear();
     }
 }

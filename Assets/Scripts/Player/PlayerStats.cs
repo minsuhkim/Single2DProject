@@ -56,7 +56,6 @@ public class PlayerStats : MonoBehaviour
         if(state == PlayerState.Warrior)
         {
             maxHP = warriorMaxHP;
-            currentHp = maxHP;
             attackDamage = warriorAttackDamage;
             attack2Damage = warriorAttack2Damage;
             attackSpeed = warriorAttackSpeed;
@@ -66,7 +65,6 @@ public class PlayerStats : MonoBehaviour
         else
         {
             maxHP = bringerMaxHP;
-            currentHp = maxHP;
             attackDamage = bringerAttackDamage;
             attack2Damage = bringerAttack2Damage;
             attackSpeed = bringerAttackSpeed;

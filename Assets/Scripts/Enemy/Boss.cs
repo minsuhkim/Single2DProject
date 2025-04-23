@@ -32,6 +32,8 @@ public class Boss : Enemy
 
         target = PlayerController.Instance.transform;
 
+        bossState = BossState.Idle;
+
         if (type != EnemyType.None)
         {
             maxHP = statData.maxHP;
@@ -42,7 +44,6 @@ public class Boss : Enemy
             StartCoroutine(Think());
         }
 
-        bossState = BossState.Idle;
     }
 
 
@@ -54,6 +55,7 @@ public class Boss : Enemy
         {
             StartCoroutine(Think());
         }
+
         else
         {
             int pattern = Random.Range(0, 2);

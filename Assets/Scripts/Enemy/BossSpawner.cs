@@ -2,15 +2,22 @@ using UnityEngine;
 
 public class BossSpawner : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public BossMage boss;
+
+    private int enemyCnt = 4;
+
+    public void KillEnemy()
     {
-        
+        enemyCnt--;
+        if (enemyCnt == 0)
+        {
+            SpawnBoss();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SpawnBoss()
     {
-        
+        boss.gameObject.SetActive(true);
+        CameraManager.Instance.StartZoomBoss();
     }
 }

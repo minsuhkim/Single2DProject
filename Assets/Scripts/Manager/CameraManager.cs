@@ -44,7 +44,7 @@ public class CameraManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         UIManager.Instance.bossNameGroup.SetActive(false);
         UIManager.Instance.playerGroup.SetActive(true);
-        boss.GetComponent<BossKnight>().bossState = BossState.Battle;
+        boss.GetComponent<Boss>().bossState = BossState.Battle;
     }
 
     public void StartCameraShake(float duration, float magnitude)

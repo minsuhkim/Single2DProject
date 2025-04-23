@@ -69,6 +69,11 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.SetGameGroup(false);
     }
 
+    public void GameClear()
+    {
+
+    }
+
     public void LoadMainMenu()
     {
         SceneManagerController.Instance.StartSceneTransition("Menu");
