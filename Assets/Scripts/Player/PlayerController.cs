@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 startPos;
 
+    private bool isFirstChange = true;
+    public GameObject bringer;
+    public GameObject bringerSkillDescGroup;
+
     [Header("¹«Àû")]
     public bool isInvincible = false;
     public float invincibilityDuration = 1.0f;
@@ -121,6 +125,15 @@ public class PlayerController : MonoBehaviour
         {
             if (state == PlayerState.Warrior)
             {
+                if (isFirstChange)
+                {
+                    if(bringer && bringerSkillDescGroup)
+                    {
+                        bringer.SetActive(false);
+                        bringerSkillDescGroup.SetActive(true);
+                    }
+                    isFirstChange = false;
+                }
                 changeForm.ExchangeFormBringer();
                 state = PlayerState.Bringer;
             }

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f2b21439639a7418e58bf6ff55359e, type: 3}
+  m_Name: Chapter2
+  m_EditorClassIdentifier: 
+  ids: 0100000000000000010000000000000001000000
+  lines:
+  - "\uAE30\uC5B5\uC744 \uCC3E\uACA0\uB2E4\uB294 \uB108\uC758 \uC758\uC9C0\uAC00
+    \uC5EC\uAE30\uAE4C\uC9C0 \uC774\uB04C\uC5C8\uAD70. \uB4DC\uB514\uC5B4, \uB108\uC640
+    \uB0B4\uAC00 \uB2E4\uC2DC \uB9CC\uB098\uB294\uAD6C\uB098."
+  - "\uB108\uB3C4 \uB098\uB97C \uC544\uB294 \uAC83\uCC98\uB7FC \uB9D0\uD558\uB124.
+    \uB3C4\uB300\uCCB4... \uB098\uB294 \uB204\uAD6C\uC600\uC9C0?"
+  - "\uC6B0\uB9B0 \uAC19\uC740 \uD53C\uB97C \uB098\uB234\uC9C0. \uC624\uB798\uC804,
+    \uB108\uB294 \uC6B0\uB9AC\uC640 \uD568\uAED8 \uC774 \uC138\uACC4\uB97C \uC9C0\uD0A4\uB294
+    \uC874\uC7AC\uC600\uC5B4."
+  - "\uADF8\uB7F0\uB370 \uC65C... \uC65C \uB098\uB294 \uAE30\uC5B5\uC744 \uC783\uACE0,
+    \uC778\uAC04\uC73C\uB85C \uC0B4\uC544\uAC00\uACE0 \uC788\uC5C8\uB358 \uAC70\uC9C0?"
+  - "\uADF8\uAC74 \uB108\uC758 \uC120\uD0DD\uC774\uC5C8\uB2E4. \uB124 \uC548\uC5D0
+    \uC788\uB358 \uD798\uC774 \uB108\uBB34 \uAC15\uD588\uAE30\uC5D0, \uC5B8\uC820\uAC00\uB294
+    \uADF8\uAC83\uC5D0 \uC0BC\uCF1C\uC9C8 \uAC70\uB780 \uAC78 \uB124\uAC00 \uB204\uAD6C\uBCF4\uB2E4
+    \uC798 \uC54C\uACE0 \uC788\uC5C8\uC73C\uB2C8\uAE4C."

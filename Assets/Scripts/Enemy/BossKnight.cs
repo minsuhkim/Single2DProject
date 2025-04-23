@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.AppUI.UI;
 using UnityEngine;
 
 public class BossKnight : Boss
@@ -15,7 +17,8 @@ public class BossKnight : Boss
     public GameObject attack3RangeLeft;
     public GameObject attack3RangeRight;
 
-
+    public Dialog knightDialog;
+    public DialogueInfo knightDialogueInfo;
     protected override IEnumerator Think()
     {
         yield return new WaitForSeconds(patternChangeTime);
@@ -51,6 +54,15 @@ public class BossKnight : Boss
         StartCoroutine(Think());
     }
 
+    private void SetDialog()
+    {
+        knightDialog.lines = new List<(int, string)>();
+        for (int i = 0; i < knightDialogueInfo.ids.Count; i++)
+        {
+            knightDialog.lines.Add((knightDialogueInfo.ids[i], knightDialogueInfo.lines[i]));
+        }
+    }
+
     protected override IEnumerator DeadCoroutine()
     {
         isLive = false;
@@ -59,8 +71,10 @@ public class BossKnight : Boss
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSeconds(stateInfo.length);
         GetComponent<CapsuleCollider2D>().enabled = false;
-        StopAllCoroutines();
-        // 업적 해금
+
+        SetDialog();
+        yield return StartCoroutine(DialogueManager.Instance.ShowDialog(knightDialog));
+
         PlayerController.Instance.stats.LevelUp();
         GameManager.Instance.OpenDoor();
     }

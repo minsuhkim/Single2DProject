@@ -30,6 +30,11 @@ public class CameraManager : MonoBehaviour
 
     private IEnumerator ZoomBossCoroutine()
     {
+        if(PlayerController.Instance.bringerSkillDescGroup != null)
+        {
+            PlayerController.Instance.bringerSkillDescGroup.SetActive(false);
+        }
+
         cinemachineCamera.SetActive(false);
         Camera.main.orthographicSize = 2.5f;
         UIManager.Instance.playerGroup.SetActive(false);
@@ -42,6 +47,7 @@ public class CameraManager : MonoBehaviour
         Camera.main.transform.position = bossZoomPos.position;
         cinemachineCamera.SetActive(true);
         yield return new WaitForSeconds(0.2f);
+
         UIManager.Instance.bossNameGroup.SetActive(false);
         UIManager.Instance.playerGroup.SetActive(true);
         boss.GetComponent<Boss>().bossState = BossState.Battle;
