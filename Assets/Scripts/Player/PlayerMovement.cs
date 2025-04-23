@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 10.0f;
 
     private Rigidbody2D rb;
-    private float moveInputX;
+    public float moveInputX;
     private float moveInputY;
 
     [Header("GroundCheck")]
@@ -171,7 +171,6 @@ public class PlayerMovement : MonoBehaviour
             SoundManager.Instance.PlaySFX(SFXType.Slide);
             isSlide = true;
             playerAttack.isAttack = false;
-            playerAttack.isParrying = false;
             stats.moveSpeed = slideSpeed;
             playerAnimation.TriggerSlide();
             playerAttack.OffAttackCollider();

@@ -42,6 +42,8 @@ public class EnemyElf : Enemy
     public void FireArrow()
     {
         ElfProjectile arrow = Instantiate(projectilePrefab, firePosition.position, Quaternion.identity).GetComponent<ElfProjectile>();
-        arrow.SetArrow((target.position - transform.position).normalized, damage);
+        Vector3 direction = (target.position - transform.position);
+        direction.y = 0;
+        arrow.SetArrow(direction.normalized, damage);
     }
 }

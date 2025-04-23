@@ -20,18 +20,25 @@ public class BossKnight : Boss
     {
         yield return new WaitForSeconds(patternChangeTime);
 
-        int pattern = Random.Range(0, 3);
-        switch (pattern)
+        if (bossState == BossState.Idle)
         {
-            case 0:
-                StartCoroutine(Attack());
-                break;
-            case 1:
-                StartCoroutine(Attack2());
-                break;
-            case 2:
-                StartCoroutine(Attack3());
-                break;
+            StartCoroutine(Think());
+        }
+        else if(isLive)
+        {
+            int pattern = Random.Range(0, 3);
+            switch (pattern)
+            {
+                case 0:
+                    StartCoroutine(Attack());
+                    break;
+                case 1:
+                    StartCoroutine(Attack2());
+                    break;
+                case 2:
+                    StartCoroutine(Attack3());
+                    break;
+            }
         }
     }
 
@@ -54,6 +61,8 @@ public class BossKnight : Boss
         GetComponent<CapsuleCollider2D>().enabled = false;
         StopAllCoroutines();
         // 업적 해금
+        PlayerController.Instance.stats.LevelUp();
+        GameManager.Instance.OpenDoor();
     }
 
     public void OnAttackRange()

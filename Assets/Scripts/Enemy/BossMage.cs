@@ -11,16 +11,20 @@ public class BossMage : Boss
     {
         yield return new WaitForSeconds(patternChangeTime);
 
-        int pattern = Random.Range(0, 2);
-        switch (pattern)
+        if (isLive)
         {
-            case 0:
-                StartCoroutine(TeleportToAttack());
-                break;
-            case 1:
-                StartCoroutine(Attack2());
-                break;
+            int pattern = Random.Range(0, 2);
+            switch (pattern)
+            {
+                case 0:
+                    StartCoroutine(TeleportToAttack());
+                    break;
+                case 1:
+                    StartCoroutine(Attack2());
+                    break;
+            }
         }
+        
     }
 
     private IEnumerator TeleportToAttack()

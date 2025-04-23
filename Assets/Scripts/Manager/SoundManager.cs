@@ -84,7 +84,7 @@ public class SoundManager : MonoBehaviour
     // Scene Loading이 완료되었을 때 실행시킬 함수(BGM 실행)
     public void OnSceneLoadCompleted(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name == "Tutorial")
+        if(scene.name == "Menu" || scene.name == "Chapter1" || scene.name == "Chapter2")
         {
             PlayBGM(BGMType.GeneralBGM, 1f);
         }

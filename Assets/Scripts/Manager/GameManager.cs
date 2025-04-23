@@ -5,18 +5,18 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private int coinCount = 0;
-    public Text coinText;
-
-    private const string COIN_KEY = "CoinCount";
     private const string DAMAGE_KEY = "PlayerDamage";
     private const string ATTACK_SPEED_KEY = "PlayerAttackSpeed";
     private const string MOVE_SPEED_KEY = "PlayerMoveSpeed";
     private const string HP_KEY = "PlayerHP";
 
+    public bool isPause = false;
+
+    public GameObject doorToNextChapter;
+
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -26,52 +26,66 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddCoin(int amount)
+    private void Update()
     {
-        coinCount += amount;
-        coinText.text = coinCount.ToString();
-        SoundManager.Instance.PlaySFX(SFXType.Coin);
-        SaveCoin();
-    }
-
-    public bool UseCoin(int amount)
-    {
-        if(coinCount >= amount)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            coinCount -= amount;
-            SaveCoin();
-            return true;
+            if (isPause)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
+            }
         }
-
-        return false;
     }
 
-    public int GetCoinCount()
+    public void OpenDoor()
     {
-        return coinCount;
+        doorToNextChapter.SetActive(true);
     }
 
-    public void ResetCoin()
+    public void PauseGame()
     {
-        coinCount = 0;
-        coinText.text = coinCount.ToString();
-        SaveCoin();
+        Time.timeScale = 0;
+        isPause = true;
+        UIManager.Instance.SetPauseGroup(isPause);
+        UIManager.Instance.SetGameGroup(!isPause);
     }
 
-    private void SaveCoin()
+    public void ResumeGame()
     {
-        PlayerPrefs.SetInt(COIN_KEY, coinCount);
-        PlayerPrefs.Save();
+        Time.timeScale = 1;
+        isPause = false;
+        UIManager.Instance.SetPauseGroup(isPause);
+        UIManager.Instance.SetGameGroup(!isPause);
     }
 
-    private void LoadCoin()
+    public void GameOver()
     {
-        coinCount = PlayerPrefs.GetInt(COIN_KEY, 0);
+        Time.timeScale = 0;
+        UIManager.Instance.OnGameOverGroup();
+        UIManager.Instance.SetGameGroup(false);
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManagerController.Instance.StartSceneTransition("Menu");
+    }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
     }
 
     public void SavePlayerStats(PlayerStats stats)
     {
-        PlayerPrefs.SetInt(DAMAGE_KEY, stats.warriorDamage);
+        PlayerPrefs.SetInt(DAMAGE_KEY, stats.warriorAttackDamage);
         PlayerPrefs.SetInt(HP_KEY, stats.warriorMaxHP);
         PlayerPrefs.SetFloat(MOVE_SPEED_KEY, stats.warriorMoveSpeed);
         PlayerPrefs.SetFloat(ATTACK_SPEED_KEY, stats.warriorAttackSpeed);
@@ -81,7 +95,7 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey(DAMAGE_KEY))
         {
-            stats.warriorDamage = PlayerPrefs.GetInt(DAMAGE_KEY);
+            stats.warriorAttackDamage = PlayerPrefs.GetInt(DAMAGE_KEY);
         }
         if (PlayerPrefs.HasKey(HP_KEY))
         {

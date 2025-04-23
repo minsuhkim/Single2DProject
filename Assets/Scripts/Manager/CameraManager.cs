@@ -6,6 +6,11 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
 
+    public GameObject cinemachineCamera;
+    public GameObject boss;
+    public Transform bossZoomPos;
+    private float zoomSpeed = 2f;
+
     private void Awake()
     {
         if(Instance == null)
@@ -16,6 +21,30 @@ public class CameraManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void StartZoomBoss()
+    {
+        StartCoroutine(ZoomBossCoroutine());
+    }
+
+    private IEnumerator ZoomBossCoroutine()
+    {
+        cinemachineCamera.SetActive(false);
+        Camera.main.orthographicSize = 2.5f;
+        UIManager.Instance.playerGroup.SetActive(false);
+        UIManager.Instance.SetBossName();
+        while (Vector3.Distance(bossZoomPos.position, Camera.main.transform.position) > 0.01f)
+        {
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, bossZoomPos.position, zoomSpeed * Time.deltaTime);
+            yield return null;
+        }
+        Camera.main.transform.position = bossZoomPos.position;
+        cinemachineCamera.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        UIManager.Instance.bossNameGroup.SetActive(false);
+        UIManager.Instance.playerGroup.SetActive(true);
+        boss.GetComponent<BossKnight>().bossState = BossState.Battle;
     }
 
     public void StartCameraShake(float duration, float magnitude)

@@ -1,6 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
+public enum BossState
+{
+    Idle, Battle
+}
+
 public class Boss : Enemy
 {
     [SerializeField]
@@ -9,6 +14,8 @@ public class Boss : Enemy
     protected float attackDelay = 2f;
     [SerializeField]
     protected float attack2Delay = 2f;
+
+    public BossState bossState;
 
     protected override void Start()
     {
@@ -34,6 +41,8 @@ public class Boss : Enemy
             attackSpeed = statData.attackSpeed;
             StartCoroutine(Think());
         }
+
+        bossState = BossState.Idle;
     }
 
 
@@ -41,15 +50,22 @@ public class Boss : Enemy
     {
         yield return new WaitForSeconds(patternChangeTime);
 
-        int pattern = Random.Range(0, 2);
-        switch (pattern)
+        if(bossState == BossState.Idle)
         {
-            case 0:
-                StartCoroutine(Attack());
-                break;
-            case 1:
-                StartCoroutine(Attack2());
-                break;
+            StartCoroutine(Think());
+        }
+        else
+        {
+            int pattern = Random.Range(0, 2);
+            switch (pattern)
+            {
+                case 0:
+                    StartCoroutine(Attack());
+                    break;
+                case 1:
+                    StartCoroutine(Attack2());
+                    break;
+            }
         }
     }
 

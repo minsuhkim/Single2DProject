@@ -66,7 +66,7 @@ public class PlayerAttack : MonoBehaviour
                     continue;
                 }
                 Instantiate(projectilePrefab, detectEnemy[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity);
-                detectEnemy[i].GetComponent<Enemy>().TakeDamage(PlayerController.Instance.stats.damage);
+                detectEnemy[i].GetComponent<Enemy>().TakeDamage(PlayerController.Instance.stats.attack2Damage);
             }
             detectEnemy.Clear();
         }

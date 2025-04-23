@@ -36,7 +36,10 @@ public class ElfProjectile : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            collision.GetComponent<PlayerStats>().TakeDamage(damage);
+            if (!PlayerController.Instance.isInvincible)
+            {
+                collision.GetComponent<PlayerStats>().TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }

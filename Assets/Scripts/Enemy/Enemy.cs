@@ -73,7 +73,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        if (!(type == EnemyType.None))
+        if ((type != EnemyType.None))
         {
             animator = GetComponent<Animator>();
         }
@@ -86,10 +86,11 @@ public class Enemy : MonoBehaviour
 
         target = PlayerController.Instance.transform;
 
+        maxHP = statData.maxHP;
+        curHP = maxHP;
+
         if (type != EnemyType.None)
         {
-            maxHP = statData.maxHP;
-            curHP = maxHP;
             damage = statData.damage;
             moveSpeed = statData.moveSpeed;
             attackSpeed = statData.attackSpeed;
@@ -99,27 +100,35 @@ public class Enemy : MonoBehaviour
 
     protected virtual void ChangeState(EnemyState state)
     {
-        currentState = state;
-
-        if (curCoroutine != null)
+        if (!isLive)
         {
-            StopCoroutine(curCoroutine);
+            return;
         }
 
-        switch (state)
+        if(type != EnemyType.None)
         {
-            case EnemyState.Attack:
-                curCoroutine = StartCoroutine(AttackCoroutine());
-                break;
-            case EnemyState.Patrol:
-                curCoroutine = StartCoroutine(PatrolCoroutine());
-                break;
-            case EnemyState.Idle:
-                curCoroutine = StartCoroutine(IdleCoroutine());
-                break;
-            case EnemyState.Dead:
-                curCoroutine = StartCoroutine(DeadCoroutine());
-                break;
+            currentState = state;
+
+            if (curCoroutine != null)
+            {
+                StopCoroutine(curCoroutine);
+            }
+
+            switch (state)
+            {
+                case EnemyState.Attack:
+                    curCoroutine = StartCoroutine(AttackCoroutine());
+                    break;
+                case EnemyState.Patrol:
+                    curCoroutine = StartCoroutine(PatrolCoroutine());
+                    break;
+                case EnemyState.Idle:
+                    curCoroutine = StartCoroutine(IdleCoroutine());
+                    break;
+                case EnemyState.Dead:
+                    curCoroutine = StartCoroutine(DeadCoroutine());
+                    break;
+            }
         }
     }
 
@@ -127,7 +136,24 @@ public class Enemy : MonoBehaviour
     {
         if (collision.tag == "PlayerAttack")
         {
-            int damage = collision.GetComponentInParent<PlayerStats>().damage;
+            PlayerController.Instance.curMP += 2f;
+            if(PlayerController.Instance.curMP > PlayerController.Instance.stats.maxMP)
+            {
+                PlayerController.Instance.curMP = PlayerController.Instance.stats.maxMP;
+            }
+            UIManager.Instance.SetMPImage(PlayerController.Instance.curMP);
+            int damage = collision.GetComponentInParent<PlayerStats>().attackDamage;
+            TakeDamage(damage);
+        }
+        else if (collision.tag == "PlayerAttack2")
+        {
+            PlayerController.Instance.curMP += 3f;
+            if (PlayerController.Instance.curMP > PlayerController.Instance.stats.maxMP)
+            {
+                PlayerController.Instance.curMP = PlayerController.Instance.stats.maxMP;
+            }
+            UIManager.Instance.SetMPImage(PlayerController.Instance.curMP);
+            int damage = collision.GetComponentInParent<PlayerStats>().attack2Damage;
             TakeDamage(damage);
         }
     }
@@ -237,13 +263,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    //public void ChangeState(EnemyState state)
+    //public void ChangeState(EnemyState bossState)
     //{
     //    if (type == EnemyType.None || isWait)
     //    {
     //        return;
     //    }
-    //    this.currentState = state;
+    //    this.currentState = bossState;
     //    Debug.Log(currentState);
     //}
 

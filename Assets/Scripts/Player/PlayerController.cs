@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum PlayerState
 {
@@ -12,7 +13,6 @@ public class PlayerController : MonoBehaviour
 
     private PlayerMovement movement;
     private PlayerAttack attack;
-    private PlayerHP hp;
     private PlayerExchangeForm changeForm;
     public PlayerAnimation anim;
 
@@ -20,9 +20,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
     private Vector3 startPos;
-
-    private bool isPaused = false;
-    public GameObject pausePanel;
 
     [Header("무적")]
     public bool isInvincible = false;
@@ -43,6 +40,19 @@ public class PlayerController : MonoBehaviour
     [Header("Stat")]
     public PlayerStats stats;
 
+    [Header("Heal")]
+    public float curMP;
+    public float healCount = 0;
+    public float healCoolTime = 1.5f;
+    public bool isHeal = false;
+    public float requireMPToHeal = 2.5f;
+    public GameObject healEffect;
+
+
+    [Header("BossRoom")]
+    public GameObject[] bossRoom;
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -56,11 +66,11 @@ public class PlayerController : MonoBehaviour
 
         movement = GetComponent<PlayerMovement>();
         attack = GetComponent<PlayerAttack>();
-        hp = GetComponent<PlayerHP>();
         anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
         changeForm = GetComponent<PlayerExchangeForm>();
         stats = GetComponent<PlayerStats>();
+        curMP = stats.maxMP;
     }
     private void Start()
     {
@@ -84,14 +94,32 @@ public class PlayerController : MonoBehaviour
             attack.PerformAttack2();
         }
 
-        //if (Input.GetKeyDown(KeyCode.LeftControl))
-        //{
-        //    stats.LevelUp();
-        //}
+        if (movement.isGrounded && Input.GetKey(KeyCode.S) && !movement.isSlide && movement.moveInputX == 0)
+        {
+            if(isHeal == false && curMP >= requireMPToHeal && stats.maxHP > stats.currentHp)
+            {
+                healCount += Time.deltaTime;
+                healEffect.SetActive(true);
+                if (healCount >= 1f)
+                {
+                    stats.Heal(1);
+                    curMP -= requireMPToHeal;
+                    UIManager.Instance.SetMPImage(curMP);
+                    StartCoroutine(HealCoolDownCoroutine());
+                    healEffect.SetActive(false);
+                }
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.S) || movement.moveInputX != 0)
+        {
+            healCount = 0;
+            healEffect.SetActive(false);
+        }
 
         if (stats.level > 2 &&  movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide && !attack.isAttack)
         {
-            if(state == PlayerState.Warrior)
+            if (state == PlayerState.Warrior)
             {
                 changeForm.ExchangeFormBringer();
                 state = PlayerState.Bringer;
@@ -104,43 +132,34 @@ public class PlayerController : MonoBehaviour
 
                 stats.SetStats(state);
         }
-         
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if(state == PlayerState.Bringer)
         {
-            if (isPaused)
+            curMP -= Time.deltaTime;
+            if(curMP <= 0)
             {
-                Resume();
+                curMP = 0;
+                changeForm.ExchangeFormWarrior();
+                state = PlayerState.Warrior;
+                stats.SetStats(state);
             }
-            else
-            {
-                Pause();
-            }
+            UIManager.Instance.SetMPImage(curMP);
         }
+         
     }
 
-    public void Pause()
-    {
-        pausePanel.SetActive(true);
-        isPaused = true;
-        Time.timeScale = 0;
-    }
 
-    public void Resume()
+
+    private IEnumerator HealCoolDownCoroutine()
     {
-        pausePanel.SetActive(false);
-        isPaused = false;
-        Time.timeScale = 1;
+        isHeal = true;
+        yield return new WaitForSeconds(healCoolTime);
+        isHeal = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Coin")
-        {
-            GameManager.Instance.AddCoin(10);
-            Destroy(collision.gameObject);
-        }
-        else if (collision.tag == "DeathZone")
+        if (collision.tag == "DeathZone")
         {
             // death
             transform.position = startPos;
@@ -157,7 +176,9 @@ public class PlayerController : MonoBehaviour
         else if(collision.tag == "Door")
         {
             // 일단 하드 코딩으로 씬 넘겨주기
-            SceneManagerController.Instance.StartSceneTransition("Chapter1");
+            string currentScene = SceneManager.GetActiveScene().name;
+            int chapter = currentScene[7] - '0';
+            SceneManagerController.Instance.StartSceneTransition("Chapter" + (chapter+1).ToString());
         }
         else if(collision.tag == "Item")
         {
@@ -165,6 +186,27 @@ public class PlayerController : MonoBehaviour
             stats.LevelUp();
             collision.gameObject.SetActive(false);
         }
+        else if(collision.tag == "Trap")
+        {
+            Hurt(collision.gameObject.transform);
+            transform.position = startPos;
+        }
+        else if(collision.tag == "EnterBossRoom")
+        {
+            // 보스룸 입장
+            StartBossRoom();
+            collision.gameObject.SetActive(false);
+        }
+    }
+
+    private void StartBossRoom()
+    {
+        foreach(var obj in bossRoom)
+        {
+            obj.SetActive(true);
+        }
+        SoundManager.Instance.PlayBGM(BGMType.BossBattleBGM);
+        CameraManager.Instance.StartZoomBoss();
     }
 
     private void Hurt(Transform enemyTransform)
@@ -172,6 +214,7 @@ public class PlayerController : MonoBehaviour
         if (!isInvincible)
         {
             anim.TriggerHurt();
+            stats.TakeDamage(1);
             ParticleManager.Instance.ParticlePlay(ParticleType.PlayerDamage, transform.position, Vector3.one * 2);
             SoundManager.Instance.PlaySFX(SFXType.Hit);
             CameraManager.Instance.StartCameraShake(shakeDuration, shakeMagnitude);

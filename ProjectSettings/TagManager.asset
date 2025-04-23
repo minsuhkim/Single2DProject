@@ -13,6 +13,8 @@ TagManager:
   - Item
   - Door
   - EnterBossRoom
+  - Trap
+  - PlayerAttack2
   layers:
   - Default
   - TransparentFX

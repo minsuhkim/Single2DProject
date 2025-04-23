@@ -10,7 +10,7 @@ public class EnemyDemonKin : Enemy
     protected override void Start()
     {
         base.Start();
-        attackDistance = 2f;
+        attackDistance = 1.5f;
         chaseDistance = 7f;
     }
 
