@@ -14,6 +14,11 @@ public class EnemyDemonKin : Enemy
         chaseDistance = 7f;
     }
 
+    public void OnAttackSound()
+    {
+        SoundManager.Instance.PlaySFX(SFXType.Attack);
+    }
+
     protected override IEnumerator AttackCoroutine()
     {
         if (target.position.x > transform.position.x)

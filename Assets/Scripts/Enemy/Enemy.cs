@@ -162,6 +162,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        SoundManager.Instance.PlaySFX(SFXType.EnemyHit);
         curHP -= damage;
         if (curHP <= 0)
         {
@@ -238,7 +239,6 @@ public class Enemy : MonoBehaviour
 
     protected virtual IEnumerator HitCoroutine()
     {
-        SoundManager.Instance.PlaySFX(SFXType.Hit);
         CameraManager.Instance.StartCameraShake(duration, magnitude);
         objectRenderer.material.color = Color.red;
         yield return new WaitForSeconds(colorChangeDuration);

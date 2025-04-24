@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
 
     public bool isPause = false;
 
+    [Header("Clear")]
+    public GameObject clearPanel;
+    private bool isClear = false;
+
     public GameObject doorToNextChapter;
 
     private void Awake()
@@ -39,6 +43,19 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+
+        if (isClear)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                LoadMainMenu();
+            }
+        }
+    }
+
+    public void OnButtonClickSound()
+    {
+        SoundManager.Instance.PlaySFX(SFXType.ButtonClick);
     }
 
     public void OpenDoor()
@@ -60,6 +77,7 @@ public class GameManager : MonoBehaviour
         isPause = false;
         UIManager.Instance.SetPauseGroup(isPause);
         UIManager.Instance.SetGameGroup(!isPause);
+        UIManager.Instance.OffOptionGroup();
     }
 
     public void GameOver()
@@ -71,11 +89,16 @@ public class GameManager : MonoBehaviour
 
     public void GameClear()
     {
+        //SoundManager.Instance.PlayBGM(BGMType.GameClearBGM);
+        isClear = true;
+        Time.timeScale = 0;
+        clearPanel.SetActive(true);
 
     }
 
     public void LoadMainMenu()
     {
+        Time.timeScale = 1;
         SceneManagerController.Instance.StartSceneTransition("Menu");
     }
 

@@ -56,6 +56,9 @@ public class PlayerController : MonoBehaviour
     [Header("BossRoom")]
     public GameObject[] bossRoom;
 
+    [Header("Dialog")]
+    public bool isDialog = false;
+
 
     private void Awake()
     {
@@ -88,17 +91,17 @@ public class PlayerController : MonoBehaviour
             movement.HandleMovement();
         }
 
-        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isSlide)
+        if (movement.isGrounded && Input.GetKeyDown(KeyCode.Z) && !movement.isSlide && !isDialog)
         {
             attack.PerformAttack();
         }
 
-        if (stats.level > 0 && movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isSlide)
+        if (stats.level > 0 && movement.isGrounded && Input.GetKeyDown(KeyCode.C) && !movement.isSlide && !isDialog)
         {
             attack.PerformAttack2();
         }
 
-        if (movement.isGrounded && Input.GetKey(KeyCode.S) && !movement.isSlide && movement.moveInputX == 0)
+        if (movement.isGrounded && Input.GetKey(KeyCode.S) && !movement.isSlide && movement.moveInputX == 0 && !isDialog)
         {
             if(isHeal == false && curMP >= requireMPToHeal && stats.maxHP > stats.currentHp)
             {
@@ -121,7 +124,7 @@ public class PlayerController : MonoBehaviour
             healEffect.SetActive(false);
         }
 
-        if (stats.level > 2 &&  movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide && !attack.isAttack)
+        if (stats.level > 2 &&  movement.isGrounded && Input.GetKeyDown(KeyCode.A) && !movement.isSlide && !attack.isAttack && !isDialog)
         {
             if (state == PlayerState.Warrior)
             {
@@ -196,6 +199,7 @@ public class PlayerController : MonoBehaviour
         else if(collision.tag == "Item")
         {
             // ÇØ±Ý
+            SoundManager.Instance.PlaySFX(SFXType.Item);
             stats.LevelUp();
             collision.gameObject.SetActive(false);
         }

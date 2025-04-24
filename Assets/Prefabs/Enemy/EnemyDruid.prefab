@@ -167,14 +167,13 @@ MonoBehaviour:
   colorChangeDuration: 0.05
   particleTransform: []
   duration: 0.2
-  magnitude: 0.03
+  magnitude: 0.06
   target: {fileID: 0}
+  chaseDistance: 5
   isAttack: 0
+  attackDistance: 2
+  isLive: 1
   isWait: 0
-  maxHP: 0
-  curHP: 0
-  damage: 0
-  moveSpeed: 0
-  attackSpeed: 0
   statData: {fileID: 11400000, guid: 9b4f0819b54d9724da2e240f8ce55b8f, type: 2}
+  bossSpawner: {fileID: 0}
   projectilePrefab: {fileID: 7771138030876282950, guid: 770379d1d7ee7f14a8896dc2b5f50762, type: 3}

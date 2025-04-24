@@ -201,13 +201,15 @@ MonoBehaviour:
   colorChangeDuration: 0.05
   particleTransform: []
   duration: 0.2
-  magnitude: 0.03
+  magnitude: 0.06
   target: {fileID: 0}
   chaseDistance: 5
   isAttack: 0
   attackDistance: 2
+  isLive: 1
   isWait: 0
   statData: {fileID: 11400000, guid: fc670d02e8468674aba445dad9af001f, type: 2}
+  bossSpawner: {fileID: 0}
   attackRangeLeft: {fileID: 1472737214475389537}
   attackRangeRight: {fileID: 8615398045956931323}
 --- !u!70 &4220198974591242480

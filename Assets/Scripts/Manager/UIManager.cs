@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,12 @@ public class UIManager : MonoBehaviour
     [Header("GameOver")]
     public GameObject gameOverGroup;
 
+    [Header("First Hit")]
+    public GameObject firstHitText;
+
+    [Header("Option")]
+    public GameObject optionGroup;
+
     private void Awake()
     {
         if(Instance == null)
@@ -29,6 +36,11 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void OffOptionGroup()
+    {
+        optionGroup.SetActive(false);
     }
 
     public void OnGameOverGroup()
@@ -66,5 +78,12 @@ public class UIManager : MonoBehaviour
     public void SetBossName()
     {
         bossNameGroup.SetActive(true);
+    }
+
+    public IEnumerator OnFirstHitTextCoroutine()
+    {
+        firstHitText.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        firstHitText.SetActive(false);
     }
 }

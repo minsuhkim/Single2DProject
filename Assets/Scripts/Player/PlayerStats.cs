@@ -31,7 +31,8 @@ public class PlayerStats : MonoBehaviour
     public float moveSpeed;
     public int level = 0;
 
-
+    [SerializeField]
+    private bool isFirstHit = true;
     private void Awake()
     {
         if (Instance == null)
@@ -75,6 +76,11 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        if (isFirstHit)
+        {
+            isFirstHit = false;
+            StartCoroutine(UIManager.Instance.OnFirstHitTextCoroutine());
+        }
         SoundManager.Instance.PlaySFX(SFXType.Hit);
         currentHp -= amount;
         UIManager.Instance.SetHPImage(currentHp);

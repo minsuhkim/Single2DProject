@@ -66,7 +66,7 @@ public class BossKnight : Boss
     protected override IEnumerator DeadCoroutine()
     {
         isLive = false;
-        CameraManager.Instance.StartCameraShake(duration * 1.5f, magnitude * 1.5f);
+        CameraManager.Instance.StartCameraShake(duration * 2f, magnitude * 2f);
         animator.SetTrigger("Dead");
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSeconds(stateInfo.length);

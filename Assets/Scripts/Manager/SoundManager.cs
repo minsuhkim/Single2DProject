@@ -16,7 +16,7 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -50,7 +50,7 @@ public class SoundManager : MonoBehaviour
         sfxObj.transform.SetParent(obj.transform);
 
         AudioClip[] bgmClips = Resources.LoadAll<AudioClip>("Sound/BGM");
-        foreach(var clip in bgmClips)
+        foreach (var clip in bgmClips)
         {
             try
             {
@@ -84,13 +84,17 @@ public class SoundManager : MonoBehaviour
     // Scene Loading이 완료되었을 때 실행시킬 함수(BGM 실행)
     public void OnSceneLoadCompleted(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name == "Menu" || scene.name == "Chapter1" || scene.name == "Chapter2")
+        if (scene.name == "Menu")
         {
-            PlayBGM(BGMType.GeneralBGM, 1f);
+            PlayBGM(BGMType.MenuBGM, 1f);
         }
-        else if(scene.name == "Boss")
+        else if (scene.name == "Chapter0")
         {
-            PlayBGM(BGMType.BossBGM, 1f);
+            PlayBGM(BGMType.Chapter1BGM);
+        }
+        else if (scene.name == "Chapter2")
+        {
+            PlayBGM(BGMType.Chapter2BGM, 1f);
         }
     }
 
@@ -106,24 +110,25 @@ public class SoundManager : MonoBehaviour
     }
 
     // BGM Play
-    public void PlayBGM(BGMType type, float fadeTime = 0f)
+    public void PlayBGM(BGMType type, float fadeTime = 0.5f)
     {
         // bgmDict에 해당 bgm이 없으면 실행 x
         if (!bgmDict.ContainsKey(type))
         {
+            Debug.Log(type.ToString());
             return;
         }
 
         // BGM Source에 이미 Clip이 존재
-        if(bgmSource.clip != null)
+        if (bgmSource.clip != null)
         {
             // 이미 존재하는 clip이 현재 실행하려는 clip
-            if(bgmSource.clip.name == type.ToString())
+            if (bgmSource.clip.name == type.ToString())
             {
                 return;
             }
             // fade를 진행하지 않으면 바로 변환
-            if(fadeTime == 0)
+            if (fadeTime == 0)
             {
                 bgmSource.clip = bgmDict[type];
                 bgmSource.Play();
@@ -131,7 +136,7 @@ public class SoundManager : MonoBehaviour
             // fade 진행
             else
             {
-                StartCoroutine(FadeOutBGM (() =>
+                StartCoroutine(FadeOutBGM(() =>
                 {
                     bgmSource.clip = bgmDict[type];
                     bgmSource.Play();
@@ -165,7 +170,7 @@ public class SoundManager : MonoBehaviour
         float startVolume = bgmSource.volume;
         float time = 0;
 
-        while(time < duration)
+        while (time < duration)
         {
             bgmSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
             time += Time.deltaTime;
@@ -182,7 +187,7 @@ public class SoundManager : MonoBehaviour
         float targetVolume = PlayerPrefs.GetFloat("BGMVolume", 1.0f);
         float time = 0f;
 
-        while(time < duration)
+        while (time < duration)
         {
             bgmSource.volume = Mathf.Lerp(0f, targetVolume, time / duration);
             time += Time.deltaTime;
@@ -209,19 +214,34 @@ public class SoundManager : MonoBehaviour
 
 public enum BGMType
 {
-    GeneralBGM,
+    GameClearBGM,
+    MenuBGM,
+    Chapter1BGM,
+    Chapter2BGM,
     BossBGM,
-    BossBattleBGM
+    BossBGM2,
+    BossBattleBGM,
+    BossBattleBGM2
 }
 
 public enum SFXType
 {
     Attack,
-    Coin,
+    Attack2,
     Dash,
     Jump,
     Slide,
     Walk,
     Hit,
-    Parrying
+    ChangeForm,
+    ElfAttack,
+    MageAttack,
+    MageAttack2,
+    MageTeleport,
+    Item,
+    Text,
+    ButtonClick,
+    EnemyHit,
+    Teleport,
+    DruidAttack
 }

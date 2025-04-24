@@ -45,6 +45,7 @@ public class EnemyDruid : Enemy
 
     public void RangeAttack()
     {
+        SoundManager.Instance.PlaySFX(SFXType.DruidAttack);
         Instantiate(projectilePrefab, rangeAttackPos, Quaternion.identity);
     }
 }

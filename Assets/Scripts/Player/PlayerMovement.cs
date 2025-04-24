@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.AppUI.UI;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -34,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     public float teleportDistance = 5f;
     public float teleportCoolTime = 1f;
     private Vector2 teleportDirection = Vector2.zero;
+    public float maxX;
+    public float minX;
 
     [Header("Stats")]
     private PlayerStats stats;
@@ -63,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.linearVelocity = new Vector2(moveInputX * stats.moveSpeed, rb.linearVelocity.y);
 
-        if (playerAttack.isAttack || playerAttack.isParrying)
+        if (playerAttack.isAttack || playerAttack.isParrying || PlayerController.Instance.isDialog)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocityY);
         }
@@ -93,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerAnimation != null)
         {
-            playerAnimation.SetWalking(moveInputX != 0);
+            playerAnimation.SetWalking((moveInputX != 0) && !PlayerController.Instance.isDialog);
         }
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
@@ -127,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.X) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.X) && isGrounded && !PlayerController.Instance.isDialog)
         {
             isJumpKeyDown = true;
             SoundManager.Instance.PlaySFX(SFXType.Jump);
@@ -149,9 +152,9 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V) && !PlayerController.Instance.isDialog)
         {
-            SoundManager.Instance.PlaySFX(SFXType.Slide);
+            SoundManager.Instance.PlaySFX(SFXType.Teleport);
             isTeleport = true;
             playerAnimation.TriggerTeleport();
             StartCoroutine(TeleportCoolDown());
@@ -161,6 +164,14 @@ public class PlayerMovement : MonoBehaviour
     public void MoveTeleport()
     {
         transform.position += new Vector3(teleportDirection.x, teleportDirection.y, 0) * teleportDistance;
+        if(transform.position.x > maxX)
+        {
+            transform.position = new Vector3(maxX, transform.position.y, transform.position.z);
+        }
+        else if(transform.position.x < minX)
+        {
+            transform.position = new Vector3(minX, transform.position.y, transform.position.z);
+        }
     }
 
     private IEnumerator TeleportCoolDown()
@@ -176,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V) && !PlayerController.Instance.isDialog)
         {
 
             SoundManager.Instance.PlaySFX(SFXType.Slide);

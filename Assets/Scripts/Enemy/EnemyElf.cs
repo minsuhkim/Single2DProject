@@ -41,6 +41,7 @@ public class EnemyElf : Enemy
 
     public void FireArrow()
     {
+        SoundManager.Instance.PlaySFX(SFXType.ElfAttack);
         ElfProjectile arrow = Instantiate(projectilePrefab, firePosition.position, Quaternion.identity).GetComponent<ElfProjectile>();
         Vector3 direction = (target.position - transform.position);
         direction.y = 0;

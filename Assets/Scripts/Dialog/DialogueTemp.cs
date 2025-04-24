@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DialogueTemp : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class DialogueTemp : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
+            if(SceneManager.GetActiveScene().name == "Chapter1")
+            {
+                SoundManager.Instance.PlayBGM(BGMType.BossBGM);
+            }
             StartCoroutine(DialogueManager.Instance.ShowDialog(dialog));
         }
     }

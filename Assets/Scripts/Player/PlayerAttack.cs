@@ -97,7 +97,14 @@ public class PlayerAttack : MonoBehaviour
         if (playerAnimation != null)
         {
             playerAnimation.TriggerAttack2();
-            SoundManager.Instance.PlaySFX(SFXType.Attack);
+            if(PlayerController.Instance.state == PlayerState.Warrior)
+            {
+                SoundManager.Instance.PlaySFX(SFXType.Attack);
+            }
+            else
+            {
+                SoundManager.Instance.PlaySFX(SFXType.Attack2);
+            }
         }
         if(PlayerController.Instance.state == PlayerState.Bringer)
         {
